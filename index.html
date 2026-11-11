@@ -6,15 +6,20 @@
     <title>Pancake Master Cafe - ร้านแพนเค้กแสนอร่อย</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Kanit & Prompt -->
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Mali & Itim (Cute Round Thai Fonts) -->
+    <link href="https://fonts.googleapis.com/css2?family=Itim&family=Mali:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         body {
-            font-family: 'Kanit', sans-serif;
-            background: linear-gradient(135deg, #fff5eb 0%, #ffe4e6 50%, #f0fdf4 100%);
+            font-family: 'Mali', 'Itim', cursive, sans-serif;
+            background-color: #fff0f5;
+            background-image: 
+                radial-gradient(#ffc2d1 2.5px, transparent 2.5px),
+                radial-gradient(#ffdfba 2.5px, #fff5f8 2.5px);
+            background-size: 44px 44px;
+            background-position: 0 0, 22px 22px;
             user-select: none;
             -webkit-user-select: none;
             touch-action: manipulation;
@@ -23,16 +28,50 @@
         /* Animations */
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-6px) rotate(2deg); }
+            50% { transform: translateY(-7px) rotate(2.5deg); }
+        }
+
+        @keyframes jellyBounce {
+            0%, 100% { transform: scale(1, 1); }
+            30% { transform: scale(1.12, 0.88); }
+            60% { transform: scale(0.94, 1.06); }
         }
 
         @keyframes sizzle {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02) rotate(-0.5deg); }
+            50% { transform: scale(1.03) rotate(-1deg); }
         }
 
-        .animate-float { animation: float 3s ease-in-out infinite; }
+        .animate-float { animation: float 2.8s ease-in-out infinite; }
         .animate-sizzle { animation: sizzle 0.25s ease-in-out infinite; }
+        .hover-jelly:hover { animation: jellyBounce 0.45s ease; }
+
+        /* Spatula & Flip Animations */
+        @keyframes spatulaScoop {
+            0% { transform: translate(120px, 80px) rotate(25deg); opacity: 0; }
+            30% { transform: translate(0px, 0px) rotate(0deg); opacity: 1; }
+            60% { transform: translate(-15px, -25px) rotate(-18deg) scale(1.1); opacity: 1; }
+            100% { transform: translate(120px, 80px) rotate(25deg); opacity: 0; }
+        }
+        @keyframes pancakeFlipJump {
+            0% { transform: scale(1) rotateY(0deg); }
+            50% { transform: scale(1.3) rotateY(180deg); box-shadow: 0 25px 30px rgba(0,0,0,0.4); }
+            100% { transform: scale(1) rotateY(360deg); }
+        }
+        @keyframes smokeRise {
+            0% { transform: translateY(0) scale(0.6); opacity: 0; }
+            30% { opacity: 0.7; }
+            100% { transform: translateY(-75px) scale(1.8); opacity: 0; }
+        }
+
+        .animate-spatula { animation: spatulaScoop 0.65s ease-in-out forwards; }
+        .animate-flip-jump { animation: pancakeFlipJump 0.65s ease-in-out; }
+        .smoke-puff {
+            position: absolute;
+            border-radius: 9999px;
+            pointer-events: none;
+            animation: smokeRise 1.6s ease-out forwards;
+        }
 
         /* Customer Mood Animations */
         @keyframes shake-angry {
@@ -46,6 +85,22 @@
             0%, 100% { transform: translateY(0) scale(1); }
             50% { transform: translateY(-12px) scale(1.08); }
         }
+        @keyframes customerWalkIn {
+            0% { transform: translateX(-140px) translateY(0px) rotate(-8deg); opacity: 0; }
+            25% { transform: translateX(-105px) translateY(-10px) rotate(6deg); opacity: 1; }
+            50% { transform: translateX(-70px) translateY(0px) rotate(-6deg); }
+            75% { transform: translateX(-35px) translateY(-10px) rotate(5deg); }
+            100% { transform: translateX(0px) translateY(0px) rotate(0deg); opacity: 1; }
+        }
+        @keyframes customerWalkOut {
+            0% { transform: translateX(0px) translateY(0px) rotate(0deg); opacity: 1; }
+            30% { transform: translateX(45px) translateY(-10px) rotate(8deg); }
+            70% { transform: translateX(95px) translateY(0px) rotate(-8deg); opacity: 0.8; }
+            100% { transform: translateX(150px) translateY(-8px) rotate(10deg); opacity: 0; }
+        }
+
+        .animate-walk-in { animation: customerWalkIn 0.85s ease-out forwards; }
+        .animate-walk-out { animation: customerWalkOut 0.75s ease-in forwards; }
 
         .mood-happy { animation: happy-bounce 1.2s ease-in-out infinite; filter: drop-shadow(0 4px 10px rgba(251, 191, 36, 0.5)); }
         .mood-neutral { animation: float 3s ease-in-out infinite; }
@@ -64,87 +119,104 @@
         }
 
         .btn-cute {
-            transition: all 0.15s ease;
-            box-shadow: 0 5px 0 rgba(0, 0, 0, 0.1), 0 8px 12px -3px rgba(0, 0, 0, 0.1);
+            transition: all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 5px 0 rgba(244, 114, 182, 0.25), 0 8px 15px -3px rgba(244, 114, 182, 0.25);
+            border-bottom: 3px solid rgba(0, 0, 0, 0.12);
         }
-        .btn-cute:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 0 rgba(0, 0, 0, 0.1), 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+        .btn-cute:hover:not(:disabled) {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 8px 0 rgba(244, 114, 182, 0.3), 0 12px 18px -3px rgba(244, 114, 182, 0.3);
         }
-        .btn-cute:active {
-            transform: translateY(3px);
-            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+        .btn-cute:active:not(:disabled) {
+            transform: translateY(3px) scale(0.97);
+            box-shadow: 0 2px 0 rgba(244, 114, 182, 0.2);
         }
 
         .cute-card {
-            background: rgba(255, 255, 255, 0.93);
-            backdrop-filter: blur(12px);
-            border: 4px solid #fff;
-            box-shadow: 0 15px 25px -5px rgba(255, 182, 193, 0.3);
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(14px);
+            border: 4px solid #ffd6e0;
+            box-shadow: 0 14px 28px -6px rgba(255, 143, 171, 0.28), inset 0 0 0 3px #ffffff;
+        }
+
+        .kawaii-badge {
+            background: linear-gradient(135deg, #fff0f6 0%, #ffe3ec 100%);
+            border: 2px dashed #ff8fab;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between overflow-x-hidden text-gray-700">
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden text-rose-950">
 
     <!-- OVERLAY: START GAME SCREEN -->
-    <div id="modal-start-game" class="fixed inset-0 bg-amber-950/70 backdrop-blur-md z-50 flex justify-center items-center p-4">
-        <div class="cute-card rounded-3xl max-w-md w-full p-8 flex flex-col items-center text-center relative animate-float border-4 border-amber-300 shadow-2xl">
-            <div class="w-24 h-24 bg-amber-400 rounded-3xl flex items-center justify-center text-6xl shadow-lg mb-4 transform -rotate-6">
-                🥞
+    <div id="modal-start-game" class="fixed inset-0 bg-pink-950/50 backdrop-blur-md z-50 flex justify-center items-center p-4">
+        <div class="cute-card rounded-[2.5rem] max-w-md w-full p-8 flex flex-col items-center text-center relative animate-float border-4 border-pink-300 shadow-2xl overflow-hidden">
+            <!-- Decorative Ribbon & Sparkles -->
+            <div class="absolute top-3 left-5 text-2xl animate-pulse">🌸</div>
+            <div class="absolute top-4 right-6 text-2xl animate-bounce">✨</div>
+            <div class="bg-pink-100 text-pink-600 text-xs font-bold px-4 py-1 rounded-full border border-pink-300 mb-3">
+                🎀 Kawaii Pancake & Boba Cafe 🎀
             </div>
-            <h1 class="text-3xl font-extrabold text-amber-900 mb-2 leading-tight">Pancake Master Cafe</h1>
-            <p class="text-xs text-amber-700 font-semibold mb-6">ยินดีต้อนรับสู่ร้านแพนเค้กสุดน่ารัก! รับออเดอร์ ทอดแป้ง ทาแยม และอัปเกรดสกิลไร้ขีดจำกัด</p>
+
+            <div class="w-28 h-28 bg-gradient-to-br from-amber-300 via-pink-300 to-rose-300 rounded-[2rem] flex items-center justify-center text-6xl shadow-lg mb-4 transform -rotate-6 border-4 border-white relative">
+                🥞
+                <span class="absolute -bottom-2 -right-2 text-3xl">🍓</span>
+            </div>
+            <h1 class="text-3xl font-bold text-rose-900 mb-2 leading-tight drop-shadow-xs">Pancake Master Cafe</h1>
+            <p class="text-xs text-rose-600 font-semibold mb-6 leading-relaxed">ยินดีต้อนรับสู่คาเฟ่แพนเค้กสุดมุ้งมิ้ง! 🧸💕<br>รับออเดอร์น้องๆ สัตว์แสนน่ารัก ทอดแพนเค้กนุ่มฟู และชงชาไข่มุกกันเถอะ!</p>
             
-            <button id="btn-start-game" class="btn-cute bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-12 py-4 rounded-full text-lg w-full shadow-lg flex items-center justify-center gap-3">
-                <i class="fas fa-play text-xl"></i>
-                <span>เริ่มเล่นเกมเลย!</span>
+            <button id="btn-start-game" class="btn-cute bg-gradient-to-r from-pink-400 via-rose-400 to-amber-400 hover:from-pink-500 hover:to-amber-500 text-white font-bold px-12 py-4 rounded-full text-lg w-full shadow-lg flex items-center justify-center gap-3">
+                <span class="text-2xl">🎀</span>
+                <span>เปิดร้านคาเฟ่เลย!</span>
+                <span class="text-2xl">✨</span>
             </button>
         </div>
     </div>
 
     <!-- Top Header & Dashboard -->
-    <header class="w-full py-3 px-4 md:px-6 bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
-        <div class="max-w-5xl mx-auto flex justify-between items-center">
+    <header class="w-full py-3 px-4 md:px-6 bg-white/90 backdrop-blur-md shadow-sm border-b-4 border-pink-200 sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto flex flex-wrap justify-between items-center gap-2">
             <!-- Brand -->
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 md:w-12 md:h-12 bg-amber-400 rounded-2xl flex items-center justify-center text-white text-2xl shadow-md transform -rotate-6 animate-float">
+                <div class="w-11 h-11 md:w-12 md:h-12 bg-gradient-to-tr from-pink-400 to-amber-300 rounded-2xl flex items-center justify-center text-white text-2xl shadow-md transform -rotate-6 animate-float border-2 border-white">
                     🥞
                 </div>
                 <div>
-                    <h1 class="text-xl md:text-2xl font-extrabold text-amber-900 leading-tight">Pancake Master Cafe</h1>
-                    <p class="text-[11px] md:text-xs text-amber-600 font-semibold">ร้านแพนเค้กแสนสนุก</p>
+                    <h1 class="text-lg md:text-2xl font-bold text-rose-900 leading-tight flex items-center gap-1.5">
+                        Pancake Master <span class="text-pink-500 text-base">🎀</span>
+                    </h1>
+                    <p class="text-[11px] md:text-xs text-pink-500 font-semibold">คาเฟ่แพนเค้กและชาไข่มุกแสนหวาน 🌸</p>
                 </div>
             </div>
 
             <!-- Stats Dashboard -->
-            <div class="flex items-center gap-3 md:gap-5">
+            <div class="flex items-center gap-2 md:gap-4 flex-wrap">
                 <!-- Coins -->
-                <div class="bg-amber-100 border-2 border-amber-300 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-inner">
-                    <span class="text-xl">🪙</span>
-                    <span id="coins-display" class="font-extrabold text-amber-900 text-sm md:text-base">0</span>
+                <div class="bg-amber-100/90 border-2 border-amber-300 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-xs">
+                    <span class="text-lg">🪙</span>
+                    <span id="coins-display" class="font-bold text-amber-900 text-sm md:text-base">0</span>
                 </div>
                 <!-- Stage Progress -->
-                <div class="bg-indigo-100 border-2 border-indigo-300 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-inner">
-                    <span class="text-xl">📋</span>
-                    <span id="stage-progress-display" class="font-extrabold text-indigo-900 text-sm md:text-base">ออเดอร์: 1/5</span>
+                <div class="bg-purple-100/90 border-2 border-purple-300 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-xs">
+                    <span class="text-lg">🧸</span>
+                    <span id="stage-progress-display" class="font-bold text-purple-900 text-sm md:text-base">ออเดอร์: 1/5</span>
                 </div>
                 <!-- Served Customers -->
-                <div class="bg-pink-100 border-2 border-pink-300 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-inner">
-                    <span class="text-xl">⭐</span>
-                    <span id="stars-display" class="font-extrabold text-pink-900 text-sm md:text-base">ดาว: 0/15</span>
+                <div class="bg-pink-100/90 border-2 border-pink-300 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-xs">
+                    <span class="text-lg">🌟</span>
+                    <span id="stars-display" class="font-bold text-pink-900 text-sm md:text-base">ดาว: 0/15</span>
                 </div>
                 <!-- Shop & Skill Button -->
-                <button id="btn-open-shop" class="bg-amber-500 hover:bg-amber-600 text-white px-3.5 py-2 rounded-full shadow-md transition flex items-center justify-center gap-2 font-bold text-xs">
-                    <i class="fas fa-graduation-cap text-sm"></i>
+                <button id="btn-open-shop" class="btn-cute bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500 text-white px-4 py-2 rounded-full transition flex items-center justify-center gap-1.5 font-bold text-xs">
+                    <span class="text-sm">🛍️</span>
                     <span>ร้านค้า & สกิล</span>
                 </button>
                 <!-- Pause Button -->
-                <button id="btn-pause-game" class="bg-white p-2.5 rounded-full shadow-md text-amber-700 hover:bg-amber-50 transition border border-amber-200">
-                    <i class="fas fa-pause text-lg"></i>
+                <button id="btn-pause-game" class="bg-pink-50 p-2.5 rounded-full shadow-sm text-pink-600 hover:bg-pink-100 transition border-2 border-pink-200">
+                    <i class="fas fa-pause text-base"></i>
                 </button>
                 <!-- Audio Toggle -->
-                <button id="audio-toggle" class="bg-white p-2.5 rounded-full shadow-md text-amber-700 hover:bg-amber-50 transition border border-amber-200">
-                    <i class="fas fa-volume-up text-lg" id="audio-icon"></i>
+                <button id="audio-toggle" class="bg-pink-50 p-2.5 rounded-full shadow-sm text-pink-600 hover:bg-pink-100 transition border-2 border-pink-200">
+                    <i class="fas fa-volume-up text-base" id="audio-icon"></i>
                 </button>
             </div>
         </div>
@@ -156,328 +228,445 @@
         <!-- LEFT PANEL: Customer & Active Order Ticket -->
         <aside class="w-full md:w-80 flex flex-col gap-4">
             
-            <!-- Customer Avatar Box -->
-            <div id="customer-box" class="cute-card rounded-3xl p-4 flex flex-col items-center relative overflow-hidden transition-colors duration-500">
-                <div class="w-full flex justify-between items-center mb-2">
-                    <span class="text-xs font-bold text-amber-800 bg-amber-100 px-2.5 py-1 rounded-full flex items-center gap-1">
-                        <span id="customer-mood-badge">😊 อารมณ์ดีมาก</span>
-                    </span>
-                    <span id="customer-name" class="text-xs font-bold text-gray-500">น้องหมีน่ารัก</span>
+            <!-- Cafe Scenery & Customer Table Box -->
+            <div id="customer-box" class="cute-card rounded-[2rem] overflow-hidden flex flex-col items-center relative transition-colors duration-500 border-4 border-pink-200">
+                <!-- Cafe Awning Roof (Pastel Strawberry & Cream) -->
+                <div class="w-full h-6 flex shadow-sm z-20">
+                    <div class="flex-1 bg-pink-400 rounded-b-xl border-b-2 border-pink-500/30"></div>
+                    <div class="flex-1 bg-rose-50 rounded-b-xl border-b-2 border-pink-200/50"></div>
+                    <div class="flex-1 bg-pink-400 rounded-b-xl border-b-2 border-pink-500/30"></div>
+                    <div class="flex-1 bg-rose-50 rounded-b-xl border-b-2 border-pink-200/50"></div>
+                    <div class="flex-1 bg-pink-400 rounded-b-xl border-b-2 border-pink-500/30"></div>
+                    <div class="flex-1 bg-rose-50 rounded-b-xl border-b-2 border-pink-200/50"></div>
+                    <div class="flex-1 bg-pink-400 rounded-b-xl border-b-2 border-pink-500/30"></div>
+                    <div class="flex-1 bg-rose-50 rounded-b-xl border-b-2 border-pink-200/50"></div>
                 </div>
 
-                <!-- Avatar Display -->
-                <div class="relative my-3 flex justify-center items-center w-36 h-36">
-                    <div id="customer-avatar-container" class="relative flex justify-center items-center">
-                        <div id="customer-avatar" class="text-8xl mood-happy transition-transform">🐻</div>
-                        
-                        <!-- Dynamic Mood Overlays / FX -->
-                        <div id="mood-fx-container" class="absolute inset-0 pointer-events-none flex justify-center items-center">
-                            <span id="fx-sweat" class="hidden absolute top-0 right-2 text-2xl">💧</span>
-                            <span id="fx-steam" class="hidden absolute -top-4 text-3xl animate-pulse">💨</span>
-                            <span id="fx-sparkles" class="absolute -top-2 -right-2 text-2xl animate-spin">✨</span>
+                <!-- Cafe Wall Background & Window -->
+                <div class="w-full bg-gradient-to-b from-pink-100/90 via-rose-50/90 to-amber-100/70 pt-3 px-4 pb-0 flex flex-col items-center relative">
+                    <!-- Top Status Bar -->
+                    <div class="w-full flex justify-between items-center mb-2 z-20">
+                        <span class="text-[11px] font-bold text-rose-900 bg-white/95 border-2 border-pink-200 px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-xs">
+                            <span id="customer-mood-badge">😊 อารมณ์ดีมาก</span>
+                        </span>
+                        <span id="customer-name" class="text-[11px] font-bold text-pink-900 bg-pink-200/80 px-2.5 py-0.5 rounded-full border border-pink-300">น้องหมีน่ารัก</span>
+                    </div>
+
+                    <!-- Cafe Window & Potted Plant Scenery -->
+                    <div class="relative w-full h-44 flex flex-col items-center justify-end">
+                        <!-- Cafe Window -->
+                        <div class="absolute top-1 left-3 w-20 h-20 bg-sky-200 border-4 border-pink-300 rounded-t-full overflow-hidden shadow-inner opacity-90">
+                            <div class="w-full h-1/2 bg-sky-100 flex justify-end pr-2 pt-1"><span class="text-[10px]">☁️</span></div>
+                            <div class="w-full h-1/2 bg-emerald-200/90 flex items-end justify-around px-1">
+                                <span class="text-xs">🌸</span>
+                                <span class="text-xs">🌷</span>
+                            </div>
+                            <div class="absolute inset-y-0 left-1/2 w-1 bg-pink-300 -translate-x-1/2"></div>
+                            <div class="absolute inset-x-0 top-1/2 h-1 bg-pink-300 -translate-y-1/2"></div>
+                        </div>
+
+                        <!-- Cafe Menu Board & Plant on Right -->
+                        <div class="absolute top-2 right-3 flex flex-col items-end gap-1 opacity-95">
+                            <div class="bg-pink-400 border-2 border-white text-white text-[8px] font-bold px-2 py-1 rounded-xl shadow-xs leading-tight text-center">
+                                💖 SWEET CAFE<br>🥞 15🪙 • 🧋 10🪙
+                            </div>
+                            <span class="text-2xl mt-2">🌺</span>
+                        </div>
+
+                        <!-- Walking / Sitting Customer Container -->
+                        <div id="customer-walk-wrapper" class="relative z-10 flex justify-center items-center mb-3">
+                            <div id="customer-avatar-container" class="relative flex justify-center items-center">
+                                <div id="customer-avatar" class="text-7xl mood-happy transition-transform drop-shadow-md">🐻</div>
+                                
+                                <!-- Dynamic Mood Overlays / FX -->
+                                <div id="mood-fx-container" class="absolute inset-0 pointer-events-none flex justify-center items-center">
+                                    <span id="fx-sweat" class="hidden absolute top-0 right-1 text-xl">💧</span>
+                                    <span id="fx-steam" class="hidden absolute -top-4 text-2xl animate-pulse">💨</span>
+                                    <span id="fx-sparkles" class="absolute -top-2 -right-2 text-xl animate-spin">✨</span>
+                                </div>
+                            </div>
+
+                            <!-- Speech Bubble -->
+                            <div id="customer-bubble" class="absolute -top-6 -right-12 bg-white border-2 border-pink-300 rounded-2xl px-2.5 py-1 text-[11px] font-bold text-rose-800 shadow-md max-w-[125px] text-center z-20 transition-all">
+                                หิวแล้วน้า! ✨
+                            </div>
+                        </div>
+
+                        <!-- Cafe Pastel Table & Lace Tablecloth -->
+                        <div class="w-full relative z-20 flex flex-col items-center">
+                            <!-- Served Items on Table (Hidden until served) -->
+                            <div id="table-served-items" class="hidden absolute -top-6 flex items-end gap-1.5 z-30 animate-bounce">
+                                <span class="text-2xl drop-shadow">🥞</span>
+                                <span id="table-served-drink" class="hidden text-xl drop-shadow">🧋</span>
+                            </div>
+                            <!-- Table Top -->
+                            <div class="w-[92%] h-5 bg-gradient-to-b from-pink-300 to-pink-400 rounded-t-2xl border-t-2 border-white shadow-md flex justify-center items-center relative">
+                                <!-- White Lace Table Runner -->
+                                <div class="w-24 h-full bg-white/95 border-x-2 border-dashed border-pink-300 shadow-xs"></div>
+                            </div>
+                            <!-- Table Pedestal -->
+                            <div class="w-6 h-4 bg-pink-400 shadow-inner"></div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Speech Bubble -->
-                    <div id="customer-bubble" class="absolute -top-3 -right-6 bg-white border-2 border-amber-300 rounded-2xl px-3 py-1 text-xs font-bold shadow-md max-w-[130px] text-center z-10 transition-all">
-                        หิวแล้วน้า! ✨
+                <!-- Patience Bar & Treat Control Footer -->
+                <div class="w-full bg-white/95 p-3.5 pt-2.5 border-t-2 border-pink-100">
+                    <!-- Customer Patience Bar -->
+                    <div class="w-full bg-pink-100 h-3.5 rounded-full overflow-hidden border-2 border-pink-200">
+                        <div id="patience-bar" class="bg-emerald-400 h-full w-full transition-all duration-300 rounded-full"></div>
                     </div>
-                </div>
+                    <div class="w-full flex justify-between items-center text-[10px] text-rose-500 font-bold mt-1">
+                        <span>💖 ความอดทนลูกค้า</span>
+                        <span id="patience-text">100%</span>
+                    </div>
 
-                <!-- Customer Patience Bar -->
-                <div class="w-full bg-gray-200 h-3.5 rounded-full overflow-hidden border border-gray-300 mt-1">
-                    <div id="patience-bar" class="bg-emerald-500 h-full w-full transition-all duration-300"></div>
+                    <!-- Treat Customer Button -->
+                    <button id="btn-treat-boba" class="mt-2 w-full bg-gradient-to-r from-pink-100 to-rose-100 hover:from-pink-200 hover:to-rose-200 border-2 border-pink-300 text-pink-700 font-bold text-xs py-1.5 px-3 rounded-2xl transition flex items-center justify-center gap-1.5 shadow-xs hover-jelly">
+                        <span>🧋</span> เสิร์ฟชาไข่มุกอารมณ์ดี (<span id="boba-power-text">+25%</span>)
+                    </button>
                 </div>
-                <div class="w-full flex justify-between items-center text-[10px] text-gray-500 font-bold mt-1">
-                    <span>ความอดทนลูกค้า</span>
-                    <span id="patience-text">100%</span>
-                </div>
-
-                <!-- Treat Customer Button -->
-                <button id="btn-treat-boba" class="mt-2 w-full bg-pink-100 hover:bg-pink-200 border border-pink-300 text-pink-700 font-bold text-xs py-1.5 px-3 rounded-xl transition flex items-center justify-center gap-1.5 shadow-sm">
-                    <span>🧋</span> เสิร์ฟชาไข่มุกอารมณ์ดี (<span id="boba-power-text">+25%</span>)
-                </button>
             </div>
 
-            <!-- Order Ticket Box -->
-            <div class="cute-card rounded-3xl p-4 flex flex-col gap-2">
-                <h3 class="text-sm font-extrabold text-amber-900 flex items-center gap-2 border-b border-amber-100 pb-2">
-                    <span>📝</span> ใบสั่งออเดอร์ (Order Ticket)
-                </h3>
-                <div class="space-y-2 text-xs font-semibold">
-                    <div class="flex justify-between border-b border-amber-200/60 pb-1.5">
-                        <span class="text-gray-500">จำนวนชั้น:</span>
-                        <span id="order-stack" class="font-bold text-amber-800">2 ชั้น 🥞</span>
+            <!-- Active Order Ticket -->
+            <div class="cute-card rounded-[2rem] p-4 border-4 border-pink-200 relative overflow-hidden">
+                <div class="flex items-center justify-between border-b-2 border-dashed border-pink-300 pb-2 mb-2.5">
+                    <span class="text-xs font-bold text-rose-900 flex items-center gap-1.5">
+                        <span class="text-base">💌</span> ใบสั่งออเดอร์ลูกค้า
+                    </span>
+                    <span class="text-[10px] font-bold bg-pink-100 text-pink-700 border border-pink-300 px-2.5 py-0.5 rounded-full">รับออเดอร์แล้ว ✨</span>
+                </div>
+                <div class="space-y-1.5 text-xs">
+                    <div class="flex justify-between items-center bg-pink-50/80 px-2.5 py-1.5 rounded-xl border border-pink-100">
+                        <span class="text-rose-500 font-semibold">จำนวนชั้น:</span>
+                        <span id="order-stack" class="font-bold text-rose-900">1 ชั้น 🥞</span>
                     </div>
-                    <div class="flex justify-between border-b border-amber-200/60 pb-1.5">
-                        <span class="text-gray-500">ระดับความสุก:</span>
-                        <span id="order-cook" class="font-bold text-amber-600">สีน้ำตาลทอง 🟡</span>
+                    <div class="flex justify-between items-center bg-pink-50/80 px-2.5 py-1.5 rounded-xl border border-pink-100">
+                        <span class="text-rose-500 font-semibold">ความสุก:</span>
+                        <span class="font-bold text-amber-600">สีทอง 2 ด้าน 🟡</span>
                     </div>
-                    <div class="flex justify-between border-b border-amber-200/60 pb-1.5">
-                        <span class="text-gray-500">ซอส / แยม:</span>
-                        <span id="order-jam" class="font-bold text-pink-700">แยมสตรอว์เบอร์รี 🍓</span>
+                    <div class="flex justify-between items-center bg-pink-50/80 px-2.5 py-1.5 rounded-xl border border-pink-100">
+                        <span class="text-rose-500 font-semibold">แยม / สเปรด:</span>
+                        <span id="order-jam" class="font-bold text-rose-600">แยมสตรอว์เบอร์รี 🍓</span>
                     </div>
-                    <div class="flex justify-between border-b border-amber-200/60 pb-1.5">
-                        <span class="text-gray-500">ท็อปปิ้ง:</span>
-                        <span id="order-topping" class="font-bold text-indigo-700">กล้วยหอม 🍌</span>
+                    <div class="flex justify-between items-center bg-pink-50/80 px-2.5 py-1.5 rounded-xl border border-pink-100">
+                        <span class="text-rose-500 font-semibold">ท็อปปิ้ง:</span>
+                        <span id="order-topping" class="font-bold text-rose-900">กล้วยหอม 🍌</span>
                     </div>
-                    <div class="flex justify-between">
-                        <span class="text-gray-500">ไซรัป:</span>
-                        <span id="order-syrup" class="font-bold text-amber-900">น้ำผึ้ง 🍯</span>
+                    <div class="flex justify-between items-center bg-pink-50/80 px-2.5 py-1.5 rounded-xl border border-pink-100">
+                        <span class="text-rose-500 font-semibold">ซอสไซรัป:</span>
+                        <span id="order-syrup" class="font-bold text-amber-700">น้ำผึ้ง 🍯</span>
+                    </div>
+                    <div class="flex justify-between items-center bg-emerald-50/80 px-2.5 py-1.5 rounded-xl border border-emerald-200/70">
+                        <span class="text-rose-500 font-semibold">เครื่องดื่ม:</span>
+                        <span id="order-drink" class="font-bold text-emerald-700">ชานมไข่มุก 🧋</span>
                     </div>
                 </div>
             </div>
         </aside>
 
-        <!-- RIGHT PANEL: Cooking Kitchen Steps -->
-        <div class="flex-1 w-full cute-card rounded-3xl p-5 md:p-6 flex flex-col items-center min-h-[480px]">
-            
-            <!-- Navigation Tabs for Cooking Stations -->
-            <div class="w-full flex justify-around border-b-2 border-amber-100 pb-3 mb-4">
-                <button data-tab="1" class="tab-btn font-extrabold text-sm text-amber-500 border-b-4 border-amber-500 pb-1 transition">1. ผสมแป้ง</button>
-                <button data-tab="2" class="tab-btn font-bold text-sm text-gray-400 pb-1 transition">2. ทอดบนเตา</button>
-                <button data-tab="3" class="tab-btn font-bold text-sm text-gray-400 pb-1 transition">3. ทาแยม</button>
-                <button data-tab="4" class="tab-btn font-bold text-sm text-gray-400 pb-1 transition">4. แต่งหน้า & เสิร์ฟ</button>
+        <!-- RIGHT PANEL: Kitchen Stations (1 to 5) -->
+        <section class="flex-1 w-full cute-card rounded-[2rem] p-4 md:p-6 border-4 border-pink-200 flex flex-col min-h-[470px]">
+            <!-- Station Navigation Tabs -->
+            <div class="flex gap-2 md:gap-3 border-b-2 border-pink-100 pb-2.5 mb-4 overflow-x-auto">
+                <button data-tab="1" class="tab-btn font-bold text-xs md:text-sm text-pink-500 border-b-4 border-pink-400 pb-1 transition whitespace-nowrap">1. ผสมแป้ง 🥣</button>
+                <button data-tab="2" class="tab-btn font-bold text-xs md:text-sm text-rose-300 pb-1 transition whitespace-nowrap">2. ทอดกระทะ 🍳</button>
+                <button data-tab="3" class="tab-btn font-bold text-xs md:text-sm text-rose-300 pb-1 transition whitespace-nowrap">3. ทาแยม 🍓</button>
+                <button data-tab="4" class="tab-btn font-bold text-xs md:text-sm text-rose-300 pb-1 transition whitespace-nowrap">4. แต่งหน้า 🍌</button>
+                <button data-tab="5" class="tab-btn font-bold text-xs md:text-sm text-rose-300 pb-1 transition whitespace-nowrap">5. ชานมไข่มุก 🧋</button>
             </div>
 
             <!-- STATION 1: MIXING -->
-            <section id="station-1" class="station-view w-full flex flex-col items-center">
-                <h3 class="text-lg font-bold text-amber-800 mb-1">ผสมส่วนผสมให้เข้ากัน 🥣</h3>
-                <p class="text-xs text-gray-500 mb-4">ใส่แป้ง ไข่ นม น้ำตาล และเนย ลงในชามผสม</p>
-
-                <!-- Bowl Graphic -->
-                <div class="relative w-full max-w-sm h-52 flex justify-center items-end mb-4">
-                    <div id="bowl" class="relative w-56 h-36 bg-gradient-to-b from-sky-200 to-sky-400 rounded-b-full border-4 border-white shadow-xl overflow-hidden flex flex-col justify-end items-center pb-2 cursor-pointer transition-transform active:scale-95">
-                        <div id="bowl-liquid" class="w-full bg-amber-100 rounded-b-full transition-all duration-300 flex items-center justify-center relative" style="height: 0%;">
-                            <div id="mix-bubbles" class="hidden absolute inset-0 flex justify-around items-center opacity-70">
-                                <span class="animate-ping text-xs">🫧</span>
-                                <span class="animate-bounce text-xs">✨</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="whisk" class="hidden absolute top-4 right-1/4 text-5xl transform -rotate-12">🪄</div>
+            <div id="station-1" class="station-view flex-1 flex flex-col justify-between items-center text-center">
+                <div>
+                    <h2 class="text-lg font-extrabold text-amber-900">ขั้นตอนที่ 1: ผสมแป้งแพนเค้กสูตรพิเศษ</h2>
+                    <p class="text-xs text-gray-500">เลือกวัตถุดิบให้ครบทั้ง 5 อย่าง แล้วกดตีผสมแป้งให้เนียนนุ่ม</p>
                 </div>
 
-                <!-- Ingredients Grid -->
-                <div class="grid grid-cols-5 gap-2 w-full max-w-md mb-4">
+                <!-- Ingredient Buttons -->
+                <div class="grid grid-cols-5 gap-2 w-full max-w-md my-3">
                     <button data-ing="flour" class="ing-btn flex flex-col items-center bg-white p-2.5 rounded-2xl border-2 border-amber-100 shadow-sm hover:border-amber-400 transition">
                         <span class="text-2xl">🌾</span>
-                        <span class="text-[10px] font-bold text-gray-700 mt-1">แป้ง</span>
+                        <span class="text-[10px] font-bold mt-1">แป้งสาลี</span>
                     </button>
                     <button data-ing="egg" class="ing-btn flex flex-col items-center bg-white p-2.5 rounded-2xl border-2 border-amber-100 shadow-sm hover:border-amber-400 transition">
                         <span class="text-2xl">🥚</span>
-                        <span class="text-[10px] font-bold text-gray-700 mt-1">ไข่ไก่</span>
+                        <span class="text-[10px] font-bold mt-1">ไข่ไก่</span>
                     </button>
                     <button data-ing="milk" class="ing-btn flex flex-col items-center bg-white p-2.5 rounded-2xl border-2 border-amber-100 shadow-sm hover:border-amber-400 transition">
                         <span class="text-2xl">🥛</span>
-                        <span class="text-[10px] font-bold text-gray-700 mt-1">นมสด</span>
-                    </button>
-                    <button data-ing="sugar" class="ing-btn flex flex-col items-center bg-white p-2.5 rounded-2xl border-2 border-amber-100 shadow-sm hover:border-amber-400 transition">
-                        <span class="text-2xl">🍬</span>
-                        <span class="text-[10px] font-bold text-gray-700 mt-1">น้ำตาล</span>
+                        <span class="text-[10px] font-bold mt-1">นมสด</span>
                     </button>
                     <button data-ing="butter" class="ing-btn flex flex-col items-center bg-white p-2.5 rounded-2xl border-2 border-amber-100 shadow-sm hover:border-amber-400 transition">
                         <span class="text-2xl">🧈</span>
-                        <span class="text-[10px] font-bold text-gray-700 mt-1">เนย</span>
+                        <span class="text-[10px] font-bold mt-1">เนยหอม</span>
+                    </button>
+                    <button data-ing="sugar" class="ing-btn flex flex-col items-center bg-white p-2.5 rounded-2xl border-2 border-amber-100 shadow-sm hover:border-amber-400 transition">
+                        <span class="text-2xl">🍯</span>
+                        <span class="text-[10px] font-bold mt-1">น้ำตาล</span>
                     </button>
                 </div>
 
-                <button id="btn-mix" disabled class="btn-cute bg-amber-400 hover:bg-amber-500 text-amber-950 font-extrabold px-8 py-3 rounded-full text-base disabled:opacity-40">
-                    คนแป้งให้เข้ากัน! 🥣
+                <!-- Mixing Bowl Graphic -->
+                <div class="relative w-36 h-36 rounded-full bg-amber-100 border-8 border-amber-300 shadow-inner overflow-hidden flex items-end justify-center my-2">
+                    <div id="bowl-liquid" class="w-full bg-gradient-to-t from-amber-300 to-yellow-100 transition-all duration-300" style="height: 0%;"></div>
+                    <span class="absolute inset-0 flex items-center justify-center text-4xl pointer-events-none">🥣</span>
+                </div>
+
+                <button id="btn-mix" disabled class="btn-cute bg-amber-500 disabled:bg-gray-300 text-white font-extrabold px-8 py-3 rounded-full text-sm shadow-md">
+                    ตีผสมแป้งแพนเค้ก 🥄
                 </button>
-            </section>
+            </div>
 
-            <!-- STATION 2: FRYING -->
-            <section id="station-2" class="station-view hidden w-full flex flex-col items-center">
-                <h3 class="text-lg font-bold text-amber-800 mb-1">ทอดแป้งบนกระทะ 🍳 (มุมมองด้านบน)</h3>
-                <p class="text-xs text-gray-500 mb-3">กดค้างเพื่อเทแป้ง และพลิกในระดับความสุกที่ออเดอร์ต้องการ</p>
+            <!-- STATION 2: FRYING (TOP-DOWN VIEW) -->
+            <div id="station-2" class="station-view hidden flex-1 flex flex-col justify-between items-center text-center">
+                <div class="w-full flex justify-between items-center px-2">
+                    <div class="text-left">
+                        <h2 class="text-lg font-extrabold text-amber-900">ขั้นตอนที่ 2: ทอดแพนเค้กมุมมองด้านบน</h2>
+                        <p class="text-xs text-gray-500">กดค้างเพื่อเทแป้ง ทอดให้สุกสีทองทั้ง 2 ด้าน (ลากลงถังขยะได้หากไหม้)</p>
+                    </div>
+                    <span id="cook-side-badge" class="bg-amber-100 border border-amber-300 text-amber-900 text-xs font-extrabold px-3 py-1 rounded-full">ด้านที่ 1 / 2</span>
+                </div>
 
-                <!-- Top-Down View Pan -->
-                <div class="relative w-full max-w-sm h-64 flex justify-center items-center my-1">
-                    <div id="pan" class="w-64 h-64 rounded-full bg-gray-800 border-8 border-gray-600 shadow-2xl flex justify-center items-center relative overflow-hidden animate-sizzle">
-                        <div class="w-52 h-52 rounded-full bg-gray-900 border-4 border-gray-700 flex justify-center items-center relative">
-                            <!-- Target size ring -->
-                            <div id="target-zone" class="absolute w-36 h-36 rounded-full border-2 border-dashed border-yellow-400/40 transition-all"></div>
-                            <!-- Pancake Batter/Cake Top-Down -->
-                            <div id="pan-pancake" class="rounded-full shadow-lg transition-colors duration-200 flex items-center justify-center relative bg-amber-100 border-2 border-amber-200/50" style="width: 0px; height: 0px;">
-                                <div id="cook-bubbles" class="absolute inset-0 flex flex-wrap justify-around items-center p-4 opacity-0 pointer-events-none">
-                                    <div class="w-3 h-3 bg-amber-300/80 rounded-full animate-ping"></div>
-                                    <div class="w-2 h-2 bg-amber-300/80 rounded-full"></div>
-                                    <div class="w-3 h-3 bg-amber-300/80 rounded-full animate-bounce"></div>
-                                    <div class="w-2 h-2 bg-amber-300/80 rounded-full"></div>
+                <!-- Pan & Trash Bin Area -->
+                <div class="relative w-full flex items-center justify-center gap-6 my-3">
+                    <!-- Top-Down Frying Pan -->
+                    <div class="relative w-52 h-52 rounded-full bg-stone-800 border-8 border-stone-600 shadow-2xl flex items-center justify-center">
+                        <!-- Pan Handle -->
+                        <div class="absolute -right-12 w-14 h-5 bg-stone-700 rounded-r-full border-2 border-stone-500 shadow-md"></div>
+                        <!-- Inner Pan Surface -->
+                        <div class="w-44 h-44 rounded-full bg-stone-900/90 border border-stone-700 flex items-center justify-center relative overflow-visible">
+                            <!-- Pancake Batter Circle -->
+                            <div id="pan-pancake" draggable="true" class="rounded-full bg-[#fef3c7] shadow-lg transition-colors duration-200 cursor-grab active:cursor-grabbing relative flex items-center justify-center" style="width: 0px; height: 0px;">
+                                <!-- Cooking Bubbles -->
+                                <div id="cook-bubbles" class="opacity-0 transition-opacity duration-300 w-full h-full relative">
+                                    <span class="absolute top-1/4 left-1/3 w-2 h-2 bg-amber-600/40 rounded-full animate-ping"></span>
+                                    <span class="absolute bottom-1/3 right-1/4 w-2.5 h-2.5 bg-amber-600/40 rounded-full animate-ping"></span>
+                                    <span class="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-amber-700/40 rounded-full animate-ping"></span>
                                 </div>
+                            </div>
+
+                            <!-- Smoke FX Container -->
+                            <div id="smoke-container" class="absolute inset-0 pointer-events-none overflow-visible"></div>
+
+                            <!-- Spatula Graphic for Flipping -->
+                            <div id="spatula-graphic" class="hidden absolute z-30 pointer-events-none flex items-center">
+                                <div class="w-16 h-12 bg-gray-300 border-2 border-gray-400 rounded-lg shadow-lg"></div>
+                                <div class="w-14 h-3 bg-amber-800 rounded-r-full -ml-1"></div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Trash Bin Dropzone -->
+                    <div id="trash-bin" class="flex flex-col items-center justify-center w-20 h-24 bg-red-100 border-2 border-dashed border-red-400 rounded-2xl p-2 transition-all cursor-pointer shadow-sm" title="ลากแป้งที่ไหม้มาทิ้งที่นี่">
+                        <span class="text-3xl">🗑️</span>
+                        <span class="text-[10px] font-extrabold text-red-700 mt-1 leading-tight">ลากทิ้ง<br>แป้งไหม้</span>
+                    </div>
                 </div>
 
-                <!-- Cook Indicator Gauge -->
-                <div class="w-full max-w-xs mb-3">
-                    <div class="flex justify-between text-[10px] font-bold text-gray-500 mb-1">
+                <!-- Cook Progress Bar -->
+                <div class="w-full max-w-xs space-y-1">
+                    <div class="flex justify-between text-[10px] font-bold text-gray-500">
                         <span>ดิบ ⚪</span>
-                        <span class="text-amber-600">ทอง 🟡</span>
-                        <span class="text-amber-900">เกรียม 🤎</span>
-                        <span class="text-red-600">ไหม้ 🔴</span>
+                        <span class="text-amber-600">สุกพอดี 🟡</span>
+                        <span class="text-red-600">ไหม้ ⚫</span>
                     </div>
-                    <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden border">
-                        <div id="cook-meter" class="bg-gradient-to-r from-amber-100 via-amber-400 via-amber-700 to-gray-950 h-full w-0 transition-all"></div>
+                    <div class="w-full h-3.5 bg-gray-200 rounded-full overflow-hidden border border-gray-300 relative">
+                        <div class="absolute inset-y-0 left-[40%] w-[35%] bg-amber-300/40 border-x border-amber-400"></div>
+                        <div id="cook-meter" class="h-full bg-gradient-to-r from-yellow-200 via-amber-500 to-stone-900 transition-all duration-100" style="width: 0%;"></div>
                     </div>
                 </div>
 
-                <div class="flex gap-3">
-                    <button id="btn-pour" class="btn-cute bg-emerald-400 hover:bg-emerald-500 text-emerald-950 font-extrabold px-6 py-2.5 rounded-full text-sm">
-                        กดค้างเทแป้ง 🍯
+                <!-- Pan Controls -->
+                <div class="flex gap-3 mt-3">
+                    <button id="btn-pour" class="btn-cute bg-amber-400 hover:bg-amber-500 text-amber-950 font-extrabold px-6 py-2.5 rounded-full text-sm">
+                        กดค้างเทแป้ง 🫗
                     </button>
-                    <button id="btn-flip" disabled class="btn-cute bg-orange-400 hover:bg-orange-500 text-white font-extrabold px-6 py-2.5 rounded-full text-sm disabled:opacity-40">
-                        พลิกแป้ง / ตักขึ้น 🍳
+                    <button id="btn-flip" disabled class="btn-cute bg-emerald-500 disabled:bg-gray-300 text-white font-extrabold px-6 py-2.5 rounded-full text-sm">
+                        พลิกกลับด้าน 🔄
                     </button>
                 </div>
-            </section>
+            </div>
 
             <!-- STATION 3: JAM & SPREAD -->
-            <section id="station-3" class="station-view hidden w-full flex flex-col items-center">
-                <h3 class="text-lg font-bold text-amber-800 mb-1">ทาแยม & สเปรด 🍯 (มุมมองด้านบน)</h3>
-                <p class="text-xs text-gray-500 mb-3">เลือกซอสแล้วกดทาบนแพนเค้กให้ทั่วแผ่น</p>
-
-                <!-- Top-Down Stack Plate Preview -->
-                <div class="relative w-full max-w-sm h-56 bg-amber-50/50 rounded-2xl border-2 border-dashed border-amber-200 flex justify-center items-center mb-4">
-                    <div class="w-52 h-52 bg-white border-8 border-gray-200 rounded-full shadow-xl flex justify-center items-center relative overflow-hidden">
-                        <div id="jam-pancake-plate" class="relative w-full h-full flex justify-center items-center">
-                            <!-- Top-Down Pancakes inserted here -->
-                        </div>
-                    </div>
+            <div id="station-3" class="station-view hidden flex-1 flex flex-col justify-between items-center text-center">
+                <div>
+                    <h2 class="text-lg font-extrabold text-amber-900">ขั้นตอนที่ 3: ทาแยม & สเปรดแสนอร่อย</h2>
+                    <p class="text-xs text-gray-500">เลือกรสชาติแยมตามใบสั่งออเดอร์ของลูกค้า</p>
                 </div>
 
-                <!-- Jam Palette Options -->
-                <div class="grid grid-cols-4 gap-2 w-full max-w-sm mb-4">
-                    <button data-jam="strawberry" class="jam-select-btn flex flex-col items-center bg-white p-2 rounded-2xl border-2 border-pink-200 hover:border-pink-500 transition shadow-sm">
-                        <span class="text-2xl">🍓</span>
-                        <span class="text-[10px] font-bold text-pink-700 mt-1">สตรอว์เบอร์รี</span>
-                    </button>
-                    <button data-jam="blueberry" class="jam-select-btn flex flex-col items-center bg-white p-2 rounded-2xl border-2 border-purple-200 hover:border-purple-500 transition shadow-sm">
-                        <span class="text-2xl">🫐</span>
-                        <span class="text-[10px] font-bold text-purple-700 mt-1">บลูเบอร์รี</span>
-                    </button>
-                    <button data-jam="nutella" class="jam-select-btn flex flex-col items-center bg-white p-2 rounded-2xl border-2 border-amber-300 hover:border-amber-700 transition shadow-sm">
-                        <span class="text-2xl">🍫</span>
-                        <span class="text-[10px] font-bold text-amber-900 mt-1">นูเทลล่า</span>
-                    </button>
-                    <button data-jam="peanut" class="jam-select-btn flex flex-col items-center bg-white p-2 rounded-2xl border-2 border-yellow-300 hover:border-yellow-600 transition shadow-sm">
-                        <span class="text-2xl">🥜</span>
-                        <span class="text-[10px] font-bold text-yellow-800 mt-1">เนยถั่ว</span>
-                    </button>
+                <!-- Top-Down Plate Preview -->
+                <div id="jam-pancake-plate" class="relative w-48 h-48 rounded-full bg-white border-8 border-amber-100 shadow-inner flex items-center justify-center my-2"></div>
+
+                <!-- Jam Choices -->
+                <div class="grid grid-cols-3 gap-2 w-full max-w-md my-2">
+                    <button data-jam="strawberry" class="jam-select-btn bg-rose-50 hover:bg-rose-100 border-2 border-rose-200 py-2 px-3 rounded-xl text-xs font-bold text-rose-800 transition">แยมสตรอว์เบอร์รี 🍓</button>
+                    <button data-jam="blueberry" class="jam-select-btn bg-purple-50 hover:bg-purple-100 border-2 border-purple-200 py-2 px-3 rounded-xl text-xs font-bold text-purple-800 transition">แยมบลูเบอร์รี 🫐</button>
+                    <button data-jam="nutella" class="jam-select-btn bg-amber-50 hover:bg-amber-100 border-2 border-amber-300 py-2 px-3 rounded-xl text-xs font-bold text-amber-900 transition">นูเทลล่า 🍫</button>
+                    <button data-jam="peanut" class="jam-select-btn bg-orange-50 hover:bg-orange-100 border-2 border-orange-200 py-2 px-3 rounded-xl text-xs font-bold text-orange-800 transition">เนยถั่ว 🥜</button>
+                    <button data-jam="peach" class="jam-select-btn bg-amber-50 hover:bg-amber-100 border-2 border-amber-200 py-2 px-3 rounded-xl text-xs font-bold text-orange-700 transition">แยมพีช 🍑</button>
+                    <button data-jam="matcha" class="jam-select-btn bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-200 py-2 px-3 rounded-xl text-xs font-bold text-emerald-800 transition">ครีมมัทฉะ 🍵</button>
                 </div>
 
                 <button id="btn-next-station-3" class="btn-cute bg-amber-500 hover:bg-amber-600 text-white font-extrabold px-8 py-2.5 rounded-full text-sm">
-                    ไปยังสถานีแต่งหน้า ➡️
+                    ไปขั้นตอนแต่งหน้า ➡️
                 </button>
-            </section>
+            </div>
 
-            <!-- STATION 4: TOPPINGS & SERVE -->
-            <section id="station-4" class="station-view hidden w-full flex flex-col items-center">
-                <h3 class="text-lg font-bold text-amber-800 mb-1">แต่งหน้า & ราดไซรัป 🍓✨ (มุมมองด้านบน)</h3>
-                <p class="text-xs text-gray-500 mb-3">เลือกท็อปปิ้งและไซรัปให้ตรงกับออเดอร์ของลูกค้า</p>
+            <!-- STATION 4: TOPPINGS & SYRUPS -->
+            <div id="station-4" class="station-view hidden flex-1 flex flex-col justify-between items-center text-center">
+                <div>
+                    <h2 class="text-lg font-extrabold text-amber-900">ขั้นตอนที่ 4: ตกแต่งท็อปปิ้ง & ราดไซรัป</h2>
+                    <p class="text-xs text-gray-500">เลือกท็อปปิ้งและราดซอสไซรัปให้ตรงตามสั่ง</p>
+                </div>
 
-                <!-- Top-Down Final Plate Display -->
-                <div class="relative w-full max-w-sm h-56 bg-amber-50/50 rounded-2xl border-2 border-dashed border-amber-200 flex justify-center items-center mb-3">
-                    <div class="w-52 h-52 bg-white border-8 border-gray-200 rounded-full shadow-xl flex justify-center items-center relative overflow-hidden">
-                        <div id="final-pancake-plate" class="relative w-full h-full flex justify-center items-center">
-                            <!-- Final Top-Down Stacked Pancakes -->
+                <!-- Final Top-Down Plate -->
+                <div id="final-pancake-plate" class="relative w-44 h-44 rounded-full bg-white border-8 border-amber-100 shadow-inner flex items-center justify-center my-1"></div>
+
+                <!-- Toppings Grid -->
+                <div class="w-full space-y-2 my-1">
+                    <div class="grid grid-cols-4 gap-1.5">
+                        <button data-topping="banana" class="topping-select-btn bg-white border border-amber-200 py-1.5 px-2 rounded-xl text-[11px] font-bold hover:bg-amber-50 transition">กล้วยหอม 🍌</button>
+                        <button data-topping="icecream" class="topping-select-btn bg-white border border-amber-200 py-1.5 px-2 rounded-xl text-[11px] font-bold hover:bg-amber-50 transition">ไอศกรีม 🍨</button>
+                        <button data-topping="berry" class="topping-select-btn bg-white border border-amber-200 py-1.5 px-2 rounded-xl text-[11px] font-bold hover:bg-amber-50 transition">เบอร์รีสด 🍓</button>
+                        <button data-topping="chocchip" class="topping-select-btn bg-white border border-amber-200 py-1.5 px-2 rounded-xl text-[11px] font-bold hover:bg-amber-50 transition">ช็อกชิพ 🍫</button>
+                        <button data-topping="mango" class="topping-select-btn bg-white border border-amber-200 py-1.5 px-2 rounded-xl text-[11px] font-bold hover:bg-amber-50 transition">มะม่วงสุก 🥭</button>
+                        <button data-topping="kiwi" class="topping-select-btn bg-white border border-amber-200 py-1.5 px-2 rounded-xl text-[11px] font-bold hover:bg-amber-50 transition">กีวีสด 🥝</button>
+                        <button data-topping="whipcream" class="topping-select-btn bg-white border border-amber-200 py-1.5 px-2 rounded-xl text-[11px] font-bold hover:bg-amber-50 transition">วิปครีม 🍦</button>
+                        <button data-topping="cookie" class="topping-select-btn bg-white border border-amber-200 py-1.5 px-2 rounded-xl text-[11px] font-bold hover:bg-amber-50 transition">คุกกี้โอรีโอ้ 🍪</button>
+                    </div>
+
+                    <!-- Syrups Grid -->
+                    <div class="grid grid-cols-3 gap-1.5">
+                        <button data-syrup="honey" class="syrup-select-btn bg-amber-50/80 border border-amber-200 py-1.5 px-2 rounded-xl text-[11px] font-bold hover:bg-amber-100 transition">น้ำผึ้ง 🍯</button>
+                        <button data-syrup="maple" class="syrup-select-btn bg-amber-50/80 border border-amber-200 py-1.5 px-2 rounded-xl text-[11px] font-bold hover:bg-amber-100 transition">เมเปิ้ล 🍁</button>
+                        <button data-syrup="choc" class="syrup-select-btn bg-amber-50/80 border border-amber-200 py-1.5 px-2 rounded-xl text-[11px] font-bold hover:bg-amber-100 transition">ช็อกโกแลต 🍫</button>
+                        <button data-syrup="caramel" class="syrup-select-btn bg-amber-50/80 border border-amber-200 py-1.5 px-2 rounded-xl text-[11px] font-bold hover:bg-amber-100 transition">คาราเมล 🍮</button>
+                        <button data-syrup="strawberry_syrup" class="syrup-select-btn bg-amber-50/80 border border-amber-200 py-1.5 px-2 rounded-xl text-[11px] font-bold hover:bg-amber-100 transition">ซอสสตรอว์ฯ 🍓</button>
+                        <button data-syrup="condensed" class="syrup-select-btn bg-amber-50/80 border border-amber-200 py-1.5 px-2 rounded-xl text-[11px] font-bold hover:bg-amber-100 transition">นมข้นหวาน 🥛</button>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-3 mt-2">
+                    <button id="btn-serve-no-drink" class="hidden btn-cute bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-8 py-2.5 rounded-full text-sm shadow-md">
+                        เสิร์ฟแพนเค้กเลย! 🍽️✨
+                    </button>
+                    <button id="btn-next-station-4" class="btn-cute bg-amber-500 hover:bg-amber-600 text-white font-extrabold px-8 py-2.5 rounded-full text-sm shadow-md">
+                        ไปชงเครื่องดื่มไข่มุก 🧋➡️
+                    </button>
+                </div>
+            </div>
+
+            <!-- STATION 5: BUBBLE TEA MACHINE -->
+            <div id="station-5" class="station-view hidden flex-1 flex flex-col justify-between items-center text-center">
+                <div>
+                    <h2 class="text-lg font-extrabold text-amber-900">ขั้นตอนที่ 5: เครื่องชงชาไข่มุกเย็นฉ่ำ</h2>
+                    <p class="text-xs text-gray-500">1. ตักไข่มุก ➡️ 2. ตักน้ำแข็ง ➡️ 3. เลือกรสชาติและกดน้ำใส่แก้ว</p>
+                </div>
+
+                <!-- Machine & Cup Visual -->
+                <div class="relative flex flex-col items-center my-2">
+                    <!-- Dispenser Nozzle -->
+                    <div class="w-28 h-6 bg-stone-700 rounded-t-xl flex items-end justify-center shadow-md">
+                        <div class="w-4 h-3 bg-stone-400 rounded-b-md"></div>
+                    </div>
+                    <!-- Liquid Stream -->
+                    <div id="drink-stream" class="hidden w-2.5 h-12 bg-amber-500 animate-pulse"></div>
+
+                    <!-- Clear Boba Cup -->
+                    <div class="relative w-24 h-32 bg-white/60 border-4 border-sky-200 rounded-b-3xl rounded-t-lg overflow-hidden flex items-end justify-center shadow-inner mt-1">
+                        <!-- Straw -->
+                        <div id="cup-straw" class="hidden absolute -top-2 right-4 w-2.5 h-32 bg-pink-500 transform rotate-12 z-30 rounded-full"></div>
+                        <!-- Drink Liquid -->
+                        <div id="cup-liquid" class="w-full transition-all duration-300 relative z-10" style="height: 0%; background-color: #d98a4e;"></div>
+                        <!-- Ice Cubes -->
+                        <div id="cup-ice-cubes" class="hidden absolute top-4 inset-x-2 flex justify-around z-20 pointer-events-none">
+                            <span class="w-5 h-5 bg-sky-100/90 border border-white rounded-md transform rotate-12 shadow-xs"></span>
+                            <span class="w-5 h-5 bg-sky-100/90 border border-white rounded-md transform -rotate-12 shadow-xs"></span>
+                            <span class="w-5 h-5 bg-sky-100/90 border border-white rounded-md transform rotate-45 shadow-xs"></span>
+                        </div>
+                        <!-- Boba Pearls -->
+                        <div id="cup-boba-pearls" class="hidden absolute bottom-1 inset-x-1 flex flex-wrap justify-center gap-1 z-20 pointer-events-none">
+                            <span class="w-2.5 h-2.5 rounded-full bg-stone-900"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-stone-900"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-stone-900"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-stone-900"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-stone-900"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-stone-900"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-stone-900"></span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Toppings & Syrup Picker -->
-                <div class="w-full max-w-md space-y-2 mb-4">
-                    <div>
-                        <span class="text-xs font-bold text-gray-600 mb-1 block">ท็อปปิ้ง:</span>
-                        <div class="grid grid-cols-4 gap-2">
-                            <button data-topping="banana" class="topping-select-btn bg-white py-1.5 rounded-xl border border-amber-200 text-xs font-bold hover:border-amber-500 transition">🍌 กล้วย</button>
-                            <button data-topping="icecream" class="topping-select-btn bg-white py-1.5 rounded-xl border border-amber-200 text-xs font-bold hover:border-amber-500 transition">🍨 ไอศกรีม</button>
-                            <button data-topping="berry" class="topping-select-btn bg-white py-1.5 rounded-xl border border-amber-200 text-xs font-bold hover:border-amber-500 transition">🍓 เบอร์รี</button>
-                            <button data-topping="chocchip" class="topping-select-btn bg-white py-1.5 rounded-xl border border-amber-200 text-xs font-bold hover:border-amber-500 transition">🍫 ช็อกชิพ</button>
-                        </div>
-                    </div>
-
-                    <div>
-                        <span class="text-xs font-bold text-gray-600 mb-1 block">ไซรัป:</span>
-                        <div class="grid grid-cols-3 gap-2">
-                            <button data-syrup="honey" class="syrup-select-btn bg-white py-1.5 rounded-xl border border-amber-200 text-xs font-bold hover:border-amber-500 transition">🍯 น้ำผึ้ง</button>
-                            <button data-syrup="maple" class="syrup-select-btn bg-white py-1.5 rounded-xl border border-amber-200 text-xs font-bold hover:border-amber-500 transition">🍁 เมเปิ้ล</button>
-                            <button data-syrup="choc" class="syrup-select-btn bg-white py-1.5 rounded-xl border border-amber-200 text-xs font-bold hover:border-amber-500 transition">🍫 ช็อกโกแลต</button>
-                        </div>
-                    </div>
+                <!-- Boba & Ice Controls -->
+                <div class="flex gap-2 my-1">
+                    <button id="btn-add-boba" class="btn-cute bg-stone-800 text-white text-xs font-bold px-3.5 py-2 rounded-xl">1. ตักไข่มุก ⚫</button>
+                    <button id="btn-add-ice" class="btn-cute bg-sky-500 text-white text-xs font-bold px-3.5 py-2 rounded-xl">2. ตักน้ำแข็ง 🧊</button>
+                    <button id="btn-reset-drink" class="btn-cute bg-gray-200 text-gray-700 text-xs font-bold px-3 py-2 rounded-xl">เททิ้ง 🔄</button>
                 </div>
 
-                <button id="btn-serve-now" class="btn-cute bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-10 py-3 rounded-full text-base shadow-lg">
-                    เสิร์ฟลูกค้าทันที! 🍽️✨
-                </button>
-            </section>
+                <!-- Drink Flavor Buttons -->
+                <div class="flex gap-2 my-1">
+                    <button data-drink="greentea" class="drink-select-btn bg-emerald-400 text-emerald-950 font-extrabold text-xs px-3.5 py-2 rounded-xl shadow-sm">ชาเขียว 🍵</button>
+                    <button data-drink="cocoa" class="drink-select-btn bg-amber-900 text-white font-extrabold text-xs px-3.5 py-2 rounded-xl shadow-sm">โกโก้ 🍫</button>
+                    <button data-drink="milktea" class="drink-select-btn bg-amber-500 text-white font-extrabold text-xs px-3.5 py-2 rounded-xl shadow-sm">ชานม 🧋</button>
+                </div>
 
-        </div>
+                <!-- Dispense & Serve Buttons -->
+                <div class="flex gap-3 mt-2">
+                    <button id="btn-dispense-drink" disabled class="btn-cute bg-sky-500 disabled:bg-gray-300 text-white font-extrabold px-5 py-2.5 rounded-full text-xs">
+                        3. กดน้ำใส่แก้ว 🚰
+                    </button>
+                    <button id="btn-serve-now" class="btn-cute bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-6 py-2.5 rounded-full text-xs shadow-md">
+                        เสิร์ฟแพนเค้ก + ชานมไข่มุก! 🍽️🧋✨
+                    </button>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- MODAL 1: SHOP & SKILL TREE -->
     <div id="modal-shop" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex justify-center items-center p-4">
-        <div class="cute-card rounded-3xl max-w-lg w-full p-6 flex flex-col items-center relative max-h-[85vh] overflow-hidden">
-            <button id="btn-close-shop" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl font-bold">✕</button>
-            
-            <h2 class="text-2xl font-extrabold text-amber-900 mb-1 flex items-center gap-2">
-                <span>🏪</span> ร้านค้า & สกิลเชฟ
-            </h2>
-            <p class="text-xs text-gray-500 mb-3">ใช้เหรียญทองเพื่ออัปเกรดสกิลและความสามารถของเชฟ!</p>
-
-            <!-- Shop / Skill Tabs -->
-            <div class="flex gap-2 mb-4 bg-amber-100/60 p-1 rounded-full w-full justify-center">
-                <button id="shop-tab-items" class="px-5 py-1.5 rounded-full text-xs font-extrabold bg-white text-amber-900 shadow-sm transition">
-                    🛠️ อุปกรณ์ร้าน
-                </button>
-                <button id="shop-tab-skills" class="px-5 py-1.5 rounded-full text-xs font-extrabold text-gray-500 hover:text-amber-900 transition">
-                    🌟 สกิลผู้เล่น (Skill Tree)
-                </button>
+        <div class="cute-card rounded-3xl max-w-lg w-full p-6 flex flex-col max-h-[85vh] relative border-4 border-amber-300">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-extrabold text-amber-900 flex items-center gap-2">
+                    <span>🏪</span> ร้านค้า & อัปเกรดสกิลเชฟ
+                </h3>
+                <button id="btn-close-shop" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold">✕</button>
             </div>
 
-            <!-- Tab Content 1: Items -->
+            <!-- Sub-Tabs -->
+            <div class="flex gap-2 bg-amber-100/80 p-1 rounded-full mb-4 self-center">
+                <button id="shop-tab-items" class="px-5 py-1.5 rounded-full text-xs font-extrabold bg-white text-amber-900 shadow-sm transition">อุปกรณ์ร้านครัว 🍳</button>
+                <button id="shop-tab-skills" class="px-5 py-1.5 rounded-full text-xs font-extrabold text-gray-500 hover:text-amber-900 transition">อัปเกรดสกิลไร้ขีดจำกัด ✨</button>
+            </div>
+
+            <!-- Tab Content 1: Kitchen Equipment -->
             <div id="shop-view-items" class="w-full space-y-3 overflow-y-auto pr-1 flex-1">
-                <!-- Upgrade Item 1 -->
-                <div class="bg-white p-3 rounded-2xl border border-amber-200 flex justify-between items-center shadow-sm">
+                <div class="bg-amber-50/60 p-3 rounded-2xl border border-amber-300 flex justify-between items-center shadow-sm">
                     <div class="flex items-center gap-3">
                         <span class="text-3xl">🔥</span>
                         <div>
-                            <h4 class="text-sm font-bold text-gray-800">เตาไฟแรงสูง</h4>
-                            <p class="text-[11px] text-gray-500">ทอดแพนเค้กสุกเร็วขึ้น 25%</p>
+                            <h4 class="text-sm font-bold text-amber-900">เตาความร้อนสูง (Turbo Stove)</h4>
+                            <p class="text-[11px] text-gray-500">ทอดแป้งแพนเค้กสุกไวขึ้น +50%</p>
                         </div>
                     </div>
-                    <button data-upgrade="stove" class="btn-buy bg-amber-400 hover:bg-amber-500 text-amber-950 px-3 py-1.5 rounded-full text-xs font-extrabold flex items-center gap-1">
+                    <button data-upgrade="stove" class="btn-buy bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-full text-xs font-extrabold flex items-center gap-1">
                         <span>50</span> 🪙
                     </button>
                 </div>
 
-                <!-- Upgrade Item 2 -->
-                <div class="bg-white p-3 rounded-2xl border border-amber-200 flex justify-between items-center shadow-sm">
+                <div class="bg-amber-50/60 p-3 rounded-2xl border border-amber-300 flex justify-between items-center shadow-sm">
                     <div class="flex items-center gap-3">
-                        <span class="text-3xl">💖</span>
+                        <span class="text-3xl">💰</span>
                         <div>
-                            <h4 class="text-sm font-bold text-gray-800">สเปรย์ความอดทน</h4>
-                            <p class="text-[11px] text-gray-500">ลูกค้าความอดทนลดลงช้าลงเป็นพิเศษ</p>
+                            <h4 class="text-sm font-bold text-amber-900">กล่องทิปนำโชค (Lucky Tip Box)</h4>
+                            <p class="text-[11px] text-gray-500">ลูกค้าให้ทิปพิเศษเพิ่มขึ้น +50%</p>
                         </div>
                     </div>
-                    <button data-upgrade="patience" class="btn-buy bg-amber-400 hover:bg-amber-500 text-amber-950 px-3 py-1.5 rounded-full text-xs font-extrabold flex items-center gap-1">
+                    <button data-upgrade="tip" class="btn-buy bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-full text-xs font-extrabold flex items-center gap-1">
                         <span>80</span> 🪙
-                    </button>
-                </div>
-
-                <!-- Upgrade Item 3 -->
-                <div class="bg-white p-3 rounded-2xl border border-amber-200 flex justify-between items-center shadow-sm">
-                    <div class="flex items-center gap-3">
-                        <span class="text-3xl">👑</span>
-                        <div>
-                            <h4 class="text-sm font-bold text-gray-800">จานทองคำเชฟ</h4>
-                            <p class="text-[11px] text-gray-500">ได้รับเงินทิปจากลูกค้าเพิ่ม +50%</p>
-                        </div>
-                    </div>
-                    <button data-upgrade="tip" class="btn-buy bg-amber-400 hover:bg-amber-500 text-amber-950 px-3 py-1.5 rounded-full text-xs font-extrabold flex items-center gap-1">
-                        <span>120</span> 🪙
                     </button>
                 </div>
             </div>
@@ -784,17 +973,146 @@
                 const gain = this.ctx.createGain();
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(220, this.ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(650, this.ctx.currentTime + 0.12);
-                gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.12);
+                osc.frequency.exponentialRampToValueAtTime(520, this.ctx.currentTime + 0.14);
+                gain.gain.setValueAtTime(0.22, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.14);
                 osc.connect(gain);
                 gain.connect(this.ctx.destination);
                 osc.start();
-                osc.stop(this.ctx.currentTime + 0.12);
+                osc.stop(this.ctx.currentTime + 0.14);
+            }
+            playCustomerVoice(type = 'greet', pitchBase = 500, gender = 'female') {
+                if (this.muted) return;
+                this.init();
+                const now = this.ctx.currentTime;
+
+                if (type === 'greet') {
+                    // Cute Animal Crossing / Chibi style 2-syllable greeting
+                    [0, 0.11].forEach((offset, i) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'triangle';
+                        const startFreq = i === 0 ? pitchBase : pitchBase * 1.25;
+                        const endFreq = i === 0 ? pitchBase * 1.15 : pitchBase * 1.45;
+                        osc.frequency.setValueAtTime(startFreq, now + offset);
+                        osc.frequency.exponentialRampToValueAtTime(endFreq, now + offset + 0.09);
+                        gain.gain.setValueAtTime(0.22, now + offset);
+                        gain.gain.linearRampToValueAtTime(0.01, now + offset + 0.09);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(now + offset);
+                        osc.stop(now + offset + 0.09);
+                    });
+                    this.speakEnglish([
+                        "Hello! One pancake please!",
+                        "Hi there! I'm so hungry!",
+                        "Good day! Smells yummy!",
+                        "Can I order some pancakes?"
+                    ], pitchBase, 1.05, gender);
+                } else if (type === 'happy') {
+                    // Cheerful 3-note joyful chime
+                    [0, 0.09, 0.18].forEach((offset, i) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'sine';
+                        const mult = [1, 1.25, 1.5][i];
+                        osc.frequency.setValueAtTime(pitchBase * mult, now + offset);
+                        osc.frequency.exponentialRampToValueAtTime(pitchBase * mult * 1.12, now + offset + 0.08);
+                        gain.gain.setValueAtTime(0.25, now + offset);
+                        gain.gain.linearRampToValueAtTime(0.01, now + offset + 0.08);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(now + offset);
+                        osc.stop(now + offset + 0.08);
+                    });
+                    this.speakEnglish([
+                        "Yummy! Thank you so much!",
+                        "Delicious! Best pancakes ever!",
+                        "So tasty! I love it!",
+                        "Amazing! Thank you chef!"
+                    ], pitchBase, 1.12, gender);
+                } else if (type === 'annoyed') {
+                    // Downward sigh / grumble
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(pitchBase * 0.85, now);
+                    osc.frequency.linearRampToValueAtTime(pitchBase * 0.55, now + 0.22);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.22);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.22);
+                    this.speakEnglish([
+                        "Excuse me, is it ready yet?",
+                        "Taking a bit long...",
+                        "I'm getting hungry!"
+                    ], pitchBase * 0.9, 0.98, gender);
+                } else if (type === 'angry') {
+                    // Fast double angry grumble
+                    [0, 0.13].forEach((offset) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(pitchBase * 0.7, now + offset);
+                        osc.frequency.linearRampToValueAtTime(pitchBase * 0.4, now + offset + 0.1);
+                        gain.gain.setValueAtTime(0.18, now + offset);
+                        gain.gain.linearRampToValueAtTime(0.01, now + offset + 0.1);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(now + offset);
+                        osc.stop(now + offset + 0.1);
+                    });
+                    this.speakEnglish([
+                        "Hey! Hurry up please!",
+                        "Too slow! I am leaving!",
+                        "Oh no, I can't wait anymore!"
+                    ], pitchBase * 0.85, 1.15, gender);
+                }
+            }
+            speakEnglish(phrases, pitchBase = 500, rate = 1.05, gender = 'female') {
+                if (this.muted || !('speechSynthesis' in window)) return;
+                try {
+                    window.speechSynthesis.cancel();
+                    const text = phrases[Math.floor(Math.random() * phrases.length)];
+                    const utter = new SpeechSynthesisUtterance(text);
+                    utter.lang = 'en-US';
+                    utter.rate = rate;
+                    utter.volume = 0.95;
+
+                    const voices = window.speechSynthesis.getVoices();
+                    const enVoices = voices.filter(v => v.lang.startsWith('en'));
+
+                    const maleKeywords = ['male', 'david', 'daniel', 'mark', 'guy', 'james', 'alex', 'george', 'arthur', 'oliver', 'ryan', 'tom', 'fred'];
+                    const femaleKeywords = ['female', 'zira', 'samantha', 'victoria', 'jenny', 'aria', 'karen', 'moira', 'tessa', 'fiona', 'susan', 'hazel', 'libby', 'sonia'];
+
+                    let selectedVoice = null;
+                    if (gender === 'male') {
+                        selectedVoice = enVoices.find(v => maleKeywords.some(k => v.name.toLowerCase().includes(k)))
+                                     || enVoices.find(v => !femaleKeywords.some(k => v.name.toLowerCase().includes(k)));
+                        // Deep masculine pitch range (0.78 - 0.94)
+                        utter.pitch = Math.min(0.95, Math.max(0.75, 0.78 + ((pitchBase - 320) / 200) * 0.15));
+                    } else {
+                        selectedVoice = enVoices.find(v => femaleKeywords.some(k => v.name.toLowerCase().includes(k)))
+                                     || enVoices.find(v => !maleKeywords.some(k => v.name.toLowerCase().includes(k)));
+                        // Bright feminine pitch range (1.15 - 1.38)
+                        utter.pitch = Math.min(1.42, Math.max(1.12, 1.15 + ((pitchBase - 400) / 300) * 0.22));
+                    }
+
+                    if (selectedVoice) utter.voice = selectedVoice;
+
+                    window.speechSynthesis.speak(utter);
+                } catch (err) {
+                    // Fallback silently if speech synthesis is blocked
+                }
             }
         }
 
         const sound = new SoundFX();
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.getVoices();
+        }
 
         // Global button click sound handler for all interactive buttons
         document.addEventListener('click', (e) => {
@@ -806,36 +1124,162 @@
         // Mute Toggle
         document.getElementById('audio-toggle').addEventListener('click', () => {
             sound.muted = !sound.muted;
+            if (sound.muted && 'speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
             document.getElementById('audio-icon').className = sound.muted ? 'fas fa-volume-mute text-lg text-gray-400' : 'fas fa-volume-up text-lg text-amber-700';
         });
 
-        // --- Game Database ---
+        // --- Game Database (14 Unique Male, Female & Cute Characters) ---
         const CUSTOMERS = [
-            { name: 'น้องหมีมุ้งมิ้ง', avatar: '🐻' },
-            { name: 'คุณต่ายสายหวาน', avatar: '🐰' },
-            { name: 'แมวเหมียวจอมกิน', avatar: '🐱' },
-            { name: 'คุณจิ้งจอกนักชิม', avatar: '🦊' },
-            { name: 'คุณแพนด้าอารมณ์ดี', avatar: '🐼' }
+            { name: 'พี่ชายลีโอ', avatar: '👦', pitch: 360, gender: 'male' },
+            { name: 'คุณชายธีโอ', avatar: '🧑', pitch: 345, gender: 'male' },
+            { name: 'หนุ่มแว่นเรย์', avatar: '🧔', pitch: 330, gender: 'male' },
+            { name: 'เจ้าชายโนอาห์', avatar: '🤴', pitch: 355, gender: 'male' },
+            { name: 'คุณลุงอาร์เธอร์', avatar: '👴', pitch: 320, gender: 'male' },
+            { name: 'หนุ่มเท่ไคโตะ', avatar: '👱‍♂️', pitch: 350, gender: 'male' },
+            { name: 'น้องมิลค์กี้', avatar: '👧', pitch: 630, gender: 'female' },
+            { name: 'พี่สาวโมโมะ', avatar: '👩', pitch: 590, gender: 'female' },
+            { name: 'เจ้าหญิงคลาร่า', avatar: '👸', pitch: 650, gender: 'female' },
+            { name: 'น้องหมีเท็ดดี้', avatar: '🐻', pitch: 370, gender: 'male' },
+            { name: 'คุณต่ายลิลลี่', avatar: '🐰', pitch: 660, gender: 'female' },
+            { name: 'เหมียวลูน่า', avatar: '🐱', pitch: 580, gender: 'female' },
+            { name: 'จิ้งจอกฟินน์', avatar: '🦊', pitch: 390, gender: 'male' },
+            { name: 'แพนด้าเปาเปา', avatar: '🐼', pitch: 560, gender: 'female' }
         ];
 
         const JAMS = {
             strawberry: { name: 'แยมสตรอว์เบอร์รี 🍓', color: '#ef4444' },
             blueberry: { name: 'แยมบลูเบอร์รี 🫐', color: '#7c3aed' },
             nutella: { name: 'นูเทลล่า 🍫', color: '#78350f' },
-            peanut: { name: 'เนยถั่ว 🥜', color: '#d97706' }
+            peanut: { name: 'เนยถั่ว 🥜', color: '#d97706' },
+            peach: { name: 'แยมพีช 🍑', color: '#fb923c' },
+            matcha: { name: 'ครีมมัทฉะ 🍵', color: '#16a34a' }
         };
 
         const TOPPINGS = {
-            banana: { name: 'กล้วยหอม 🍌', emoji: '🍌' },
-            icecream: { name: 'ไอศกรีม 🍨', emoji: '🍨' },
-            berry: { name: 'เบอร์รีสด 🍓', emoji: '🍓' },
-            chocchip: { name: 'ช็อกชิพ 🍫', emoji: '🍫' }
+            banana: { 
+                name: 'กล้วยหอม 🍌', 
+                render: () => `
+                    <div class="relative w-full h-full">
+                        ${[0, 72, 144, 216, 288].map(deg => `
+                            <div class="absolute w-7 h-7 rounded-full bg-[#fef08a] border-2 border-[#eab308] shadow-sm flex items-center justify-center"
+                                 style="top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(${deg}deg) translateY(-26px);">
+                                <div class="w-3 h-3 rounded-full border border-dashed border-[#ca8a04]/60"></div>
+                            </div>
+                        `).join('')}
+                    </div>`
+            },
+            icecream: { 
+                name: 'ไอศกรีม 🍨', 
+                render: () => `
+                    <div class="relative w-full h-full flex items-center justify-center">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#fffbeb] via-[#fef3c7] to-[#fde68a] border-2 border-[#fcd34d] shadow-md relative flex items-center justify-center">
+                            <div class="absolute -bottom-1 w-13 h-3 bg-[#fef3c7] rounded-full blur-[1px]"></div>
+                            <div class="w-4 h-2 bg-white/70 rounded-full absolute top-2 left-2.5 transform -rotate-12"></div>
+                        </div>
+                    </div>`
+            },
+            berry: { 
+                name: 'เบอร์รีสด 🍓', 
+                render: () => `
+                    <div class="relative w-full h-full">
+                        ${[30, 120, 210, 300].map(deg => `
+                            <div class="absolute w-6 h-7 bg-gradient-to-b from-[#ef4444] to-[#b91c1c] rounded-t-lg rounded-b-2xl shadow-sm flex flex-col items-center"
+                                 style="top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(${deg}deg) translateY(-24px);">
+                                <div class="w-4 h-1.5 bg-[#16a34a] rounded-full -mt-0.5"></div>
+                                <div class="grid grid-cols-2 gap-0.5 mt-1 opacity-70">
+                                    <span class="w-0.5 h-0.5 bg-yellow-200 rounded-full"></span>
+                                    <span class="w-0.5 h-0.5 bg-yellow-200 rounded-full"></span>
+                                    <span class="w-0.5 h-0.5 bg-yellow-200 rounded-full"></span>
+                                    <span class="w-0.5 h-0.5 bg-yellow-200 rounded-full"></span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>`
+            },
+            chocchip: { 
+                name: 'ช็อกชิพ 🍫', 
+                render: () => `
+                    <div class="relative w-full h-full">
+                        ${[
+                            {x: 30, y: 30}, {x: 65, y: 28}, {x: 48, y: 45},
+                            {x: 28, y: 60}, {x: 68, y: 62}, {x: 45, y: 72},
+                            {x: 52, y: 25}, {x: 35, y: 48}, {x: 62, y: 46}
+                        ].map(pos => `
+                            <div class="absolute w-2.5 h-2.5 bg-[#3e1f0d] rounded-t-full rounded-b-md shadow-xs transform rotate-12"
+                                 style="top: ${pos.y}%; left: ${pos.x}%;">
+                                <div class="w-1 h-1 bg-white/25 rounded-full ml-0.5 mt-0.5"></div>
+                            </div>
+                        `).join('')}
+                    </div>`
+            },
+            mango: { 
+                name: 'มะม่วงสุก 🥭', 
+                render: () => `
+                    <div class="relative w-full h-full">
+                        ${[15, 87, 159, 231, 303].map(deg => `
+                            <div class="absolute w-6 h-5 rounded-md bg-gradient-to-br from-[#fde047] to-[#f59e0b] border border-[#d97706] shadow-sm"
+                                 style="top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(${deg}deg) translateY(-23px);">
+                                <div class="w-2.5 h-1.5 bg-white/40 rounded-full m-0.5"></div>
+                            </div>
+                        `).join('')}
+                    </div>`
+            },
+            kiwi: { 
+                name: 'กีวีสด 🥝', 
+                render: () => `
+                    <div class="relative w-full h-full">
+                        ${[45, 135, 225, 315].map(deg => `
+                            <div class="absolute w-7 h-7 rounded-full bg-[#65a30d] border-2 border-[#3f6212] shadow-sm flex items-center justify-center"
+                                 style="top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(${deg}deg) translateY(-25px);">
+                                <div class="w-3 h-3 rounded-full bg-[#ecfccb] flex items-center justify-center">
+                                    <div class="w-1.5 h-1.5 rounded-full border border-dotted border-black"></div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>`
+            },
+            whipcream: { 
+                name: 'วิปครีม 🍦', 
+                render: () => `
+                    <div class="relative w-full h-full flex items-center justify-center">
+                        <div class="w-11 h-11 rounded-full bg-white shadow-md border border-gray-100 flex items-center justify-center relative">
+                            <div class="w-8 h-8 rounded-full bg-gray-50 border border-gray-200/80 flex items-center justify-center shadow-inner">
+                                <div class="w-4 h-4 rounded-full bg-white shadow-xs"></div>
+                            </div>
+                        </div>
+                    </div>`
+            },
+            cookie: { 
+                name: 'คุกกี้โอรีโอ้ 🍪', 
+                render: () => `
+                    <div class="relative w-full h-full">
+                        ${[0, 120, 240].map(deg => `
+                            <div class="absolute w-7 h-7 rounded-full bg-[#27272a] border-2 border-[#18181b] shadow-md flex items-center justify-center"
+                                 style="top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(${deg}deg) translateY(-22px);">
+                                <div class="w-4 h-4 rounded-full border border-dashed border-gray-500 flex items-center justify-center">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-gray-600"></div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>`
+            }
         };
 
         const SYRUPS = {
-            honey: { name: 'น้ำผึ้ง 🍯' },
-            maple: { name: 'เมเปิ้ล 🍁' },
-            choc: { name: 'ช็อกโกแลต 🍫' }
+            honey: { name: 'น้ำผึ้ง 🍯', stroke: '#f59e0b', highlight: '#fef08a' },
+            maple: { name: 'เมเปิ้ล 🍁', stroke: '#9a3412', highlight: '#fdba74' },
+            choc: { name: 'ช็อกโกแลต 🍫', stroke: '#3e1f0d', highlight: '#78350f' },
+            caramel: { name: 'คาราเมล 🍮', stroke: '#d97706', highlight: '#fde68a' },
+            strawberry_syrup: { name: 'ซอสสตรอว์เบอร์รี 🍓', stroke: '#e11d48', highlight: '#fda4af' },
+            condensed: { name: 'นมข้นหวาน 🥛', stroke: '#fefce8', highlight: '#ffffff' }
+        };
+
+        const DRINKS = {
+            greentea: { name: 'ชาเขียวไข่มุก 🍵', color: '#4ade80' },
+            cocoa: { name: 'โกโก้ไข่มุก 🍫', color: '#5c2d16' },
+            milktea: { name: 'ชานมไข่มุก 🧋', color: '#d98a4e' }
         };
 
         const EMOTION_STATES = {
@@ -894,11 +1338,18 @@
             mixProgress: 0,
             batterSize: 0,
             cookLevel: 0,
+            cookSide: 1, // 1 = bottom side, 2 = top side
+            side1CookLevel: 0,
             cookTimer: null,
+            smokeTimer: null,
             cookedPancakes: [],
             selectedJam: null,
             selectedToppings: [],
-            selectedSyrup: null
+            selectedSyrup: null,
+            hasBoba: false,
+            hasIce: false,
+            selectedDrink: null,
+            drinkFill: 0
         };
 
         // Pause Game Logic
@@ -951,9 +1402,9 @@
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 const t = parseInt(btn.getAttribute('data-tab'));
                 if (t === tabNum) {
-                    btn.className = 'tab-btn font-extrabold text-sm text-amber-500 border-b-4 border-amber-500 pb-1 transition';
+                    btn.className = 'tab-btn font-bold text-xs md:text-sm text-pink-500 border-b-4 border-pink-400 pb-1 transition whitespace-nowrap';
                 } else {
-                    btn.className = 'tab-btn font-bold text-sm text-gray-400 pb-1 transition';
+                    btn.className = 'tab-btn font-bold text-xs md:text-sm text-rose-300 pb-1 transition whitespace-nowrap';
                 }
             });
 
@@ -983,8 +1434,17 @@
             else if (gameState.patience <= 55) moodKey = 'ANNOYED';
             else if (gameState.patience <= 80) moodKey = 'NEUTRAL';
 
+            const prevMood = gameState.currentEmotionState;
             gameState.currentEmotionState = moodKey;
             const mood = EMOTION_STATES[moodKey];
+            const custPitch = gameState.currentCustomer ? gameState.currentCustomer.pitch : 500;
+            const custGender = gameState.currentCustomer ? gameState.currentCustomer.gender : 'female';
+
+            // Play voice cue when customer mood worsens
+            if (prevMood !== moodKey) {
+                if (moodKey === 'ANNOYED') sound.playCustomerVoice('annoyed', custPitch, custGender);
+                else if (moodKey === 'ANGARY') sound.playCustomerVoice('angry', custPitch, custGender);
+            }
 
             avatar.className = `text-8xl transition-transform ${mood.animClass}`;
             container.style.backgroundColor = mood.bgColor;
@@ -1002,26 +1462,51 @@
             }
         }
 
+        function triggerCustomerWalkIn() {
+            const walkWrapper = document.getElementById('customer-walk-wrapper');
+            const tableItems = document.getElementById('table-served-items');
+            if (tableItems) tableItems.classList.add('hidden');
+
+            walkWrapper.classList.remove('animate-walk-out', 'animate-walk-in');
+            void walkWrapper.offsetWidth;
+            walkWrapper.classList.add('animate-walk-in');
+        }
+
         function generateCustomerOrder() {
-            const randomCust = CUSTOMERS[Math.floor(Math.random() * CUSTOMERS.length)];
+            // Pick a different character from the previous one so names always vary
+            const availableCustomers = CUSTOMERS.filter(c => !gameState.currentCustomer || c.name !== gameState.currentCustomer.name);
+            const randomCust = availableCustomers[Math.floor(Math.random() * availableCustomers.length)];
             gameState.currentCustomer = randomCust;
+            gameState.currentEmotionState = 'HAPPY';
             
+            // Trigger walk-in animation to the cafe table
+            triggerCustomerWalkIn();
+
+            // Play cute greeting voice matched to customer gender
+            sound.playCustomerVoice('greet', randomCust.pitch, randomCust.gender);
+
             // Random Order Specs
             const jamKeys = Object.keys(JAMS);
             const topKeys = Object.keys(TOPPINGS);
             const syrupKeys = Object.keys(SYRUPS);
+            const drinkKeys = Object.keys(DRINKS);
 
             const stack = Math.floor(Math.random() * 2) + 1; // 1 or 2 layers
             const jam = jamKeys[Math.floor(Math.random() * jamKeys.length)];
             const topping = topKeys[Math.floor(Math.random() * topKeys.length)];
             const syrup = syrupKeys[Math.floor(Math.random() * syrupKeys.length)];
+            
+            // Randomly decide whether the customer wants a drink (~60% chance wants drink, 40% no drink)
+            const wantsDrink = Math.random() < 0.6;
+            const drink = wantsDrink ? drinkKeys[Math.floor(Math.random() * drinkKeys.length)] : null;
 
             gameState.order = {
                 stack: stack,
                 cookTarget: 'ทอง 🟡',
                 jam: jam,
                 topping: topping,
-                syrup: syrup
+                syrup: syrup,
+                drink: drink
             };
 
             // UI Render Ticket & Customer
@@ -1031,6 +1516,25 @@
             document.getElementById('order-jam').innerText = JAMS[jam].name;
             document.getElementById('order-topping').innerText = TOPPINGS[topping].name;
             document.getElementById('order-syrup').innerText = SYRUPS[syrup].name;
+            
+            const drinkOrderEl = document.getElementById('order-drink');
+            const btnServeNoDrink = document.getElementById('btn-serve-no-drink');
+            const btnNextStation4 = document.getElementById('btn-next-station-4');
+            const btnServeNow = document.getElementById('btn-serve-now');
+
+            if (drink) {
+                drinkOrderEl.innerText = DRINKS[drink].name;
+                drinkOrderEl.className = 'font-bold text-emerald-700';
+                btnServeNoDrink.classList.add('hidden');
+                btnNextStation4.classList.remove('hidden');
+                btnServeNow.innerHTML = 'เสิร์ฟแพนเค้ก + ชานมไข่มุก! 🍽️🧋✨';
+            } else {
+                drinkOrderEl.innerText = 'ไม่รับเครื่องดื่ม ❌';
+                drinkOrderEl.className = 'font-bold text-gray-400';
+                btnServeNoDrink.classList.remove('hidden');
+                btnNextStation4.classList.add('hidden');
+                btnServeNow.innerHTML = 'เสิร์ฟแพนเค้ก! 🍽️✨';
+            }
 
             // Reset Kitchen State
             gameState.cookedPancakes = [];
@@ -1039,6 +1543,7 @@
             gameState.selectedJam = null;
             gameState.selectedToppings = [];
             gameState.selectedSyrup = null;
+            resetDrinkStation();
             resetMixingUI();
 
             // Reset Patience & Timer (Reduced Decay Rate for slow timer)
@@ -1079,6 +1584,9 @@
         // Treat Boba Button
         document.getElementById('btn-treat-boba').addEventListener('click', () => {
             sound.playPop();
+            const custPitch = gameState.currentCustomer ? gameState.currentCustomer.pitch : 500;
+            const custGender = gameState.currentCustomer ? gameState.currentCustomer.gender : 'female';
+            sound.playCustomerVoice('happy', custPitch, custGender);
             const bobaPower = 25 + (gameState.skills.drinkRefine.level * 5);
             gameState.patience = Math.min(100, gameState.patience + bobaPower);
             updatePatienceUI();
@@ -1096,14 +1604,20 @@
         });
 
         function handleRageQuit() {
-            sound.playPop();
+            const custPitch = gameState.currentCustomer ? gameState.currentCustomer.pitch : 500;
+            const custGender = gameState.currentCustomer ? gameState.currentCustomer.gender : 'female';
+            sound.playCustomerVoice('angry', custPitch, custGender);
             const bubble = document.getElementById('customer-bubble');
             bubble.innerText = 'โมโหแล้ว! ไม่กินแล้ว!! 🤬';
 
+            const walkWrapper = document.getElementById('customer-walk-wrapper');
+            walkWrapper.classList.remove('animate-walk-in');
+            walkWrapper.classList.add('animate-walk-out');
+
             setTimeout(() => {
-                alert('😭 ลูกค้าหมดความอดทนและเดินออกจากร้านไป! (ได้ 0 ดาว)');
+                showSkillToast('🤬', 'ลูกค้าโกรธเดินออกจากร้าน!', 'รอนานเกินไปจนหมดความอดทน (ได้ 0 ดาว)', true);
                 advanceCustomerOrder(0, 0);
-            }, 600);
+            }, 700);
         }
 
         // --- STATION 1: MIXING LOGIC ---
@@ -1148,9 +1662,31 @@
         const btnFlip = document.getElementById('btn-flip');
         const panPancake = document.getElementById('pan-pancake');
         const cookMeter = document.getElementById('cook-meter');
+        const cookSideBadge = document.getElementById('cook-side-badge');
+        const smokeContainer = document.getElementById('smoke-container');
+        const spatulaGraphic = document.getElementById('spatula-graphic');
+
+        function spawnSmokePuff(isBurnt = false) {
+            if (gameState.isPaused || gameState.batterSize <= 0) return;
+            const puff = document.createElement('div');
+            const size = Math.random() * 22 + 16;
+            const offsetX = (Math.random() - 0.5) * (gameState.batterSize * 0.7);
+            const offsetY = (Math.random() - 0.5) * (gameState.batterSize * 0.7);
+
+            puff.className = 'smoke-puff';
+            puff.style.width = `${size}px`;
+            puff.style.height = `${size}px`;
+            puff.style.left = `calc(50% + ${offsetX}px - ${size / 2}px)`;
+            puff.style.top = `calc(50% + ${offsetY}px - ${size / 2}px)`;
+            puff.style.backgroundColor = isBurnt ? 'rgba(55, 65, 81, 0.75)' : 'rgba(255, 255, 255, 0.65)';
+            puff.style.filter = 'blur(4px)';
+
+            smokeContainer.appendChild(puff);
+            setTimeout(() => puff.remove(), 1600);
+        }
 
         function startPouring() {
-            if (gameState.cookTimer) return;
+            if (gameState.cookTimer || gameState.cookSide === 2) return;
             sound.playSizzle();
             pourInterval = setInterval(() => {
                 const pourSpeed = 3 + (gameState.skills.doubleBatter.level * 1.5);
@@ -1158,7 +1694,7 @@
                 panPancake.style.width = `${gameState.batterSize}px`;
                 panPancake.style.height = `${gameState.batterSize}px`;
 
-                if (gameState.batterSize >= 90) {
+                if (gameState.batterSize >= 80) {
                     btnFlip.removeAttribute('disabled');
                 }
             }, 50);
@@ -1179,9 +1715,145 @@
         btnPour.addEventListener('touchstart', (e) => { e.preventDefault(); startPouring(); });
         btnPour.addEventListener('touchend', stopPouring);
 
+        // --- TRASH BIN DRAG & DROP / TOUCH LOGIC ---
+        const trashBin = document.getElementById('trash-bin');
+
+        function discardBurntPancake() {
+            if (gameState.batterSize <= 0) return;
+
+            sound.playPop();
+            if (gameState.cookTimer) {
+                clearInterval(gameState.cookTimer);
+                gameState.cookTimer = null;
+            }
+            if (gameState.smokeTimer) {
+                clearInterval(gameState.smokeTimer);
+                gameState.smokeTimer = null;
+            }
+            if (pourInterval) {
+                clearInterval(pourInterval);
+                pourInterval = null;
+            }
+
+            // Reset pan
+            gameState.batterSize = 0;
+            gameState.cookLevel = 0;
+            gameState.cookSide = 1;
+            gameState.side1CookLevel = 0;
+            cookSideBadge.innerText = 'ด้านที่ 1 / 2';
+            btnFlip.innerHTML = 'พลิกกลับด้าน 🔄';
+            btnPour.removeAttribute('disabled');
+
+            panPancake.style.width = '0px';
+            panPancake.style.height = '0px';
+            panPancake.style.transform = 'translate(0px, 0px)';
+            cookMeter.style.width = '0%';
+            btnFlip.setAttribute('disabled', 'true');
+            document.getElementById('cook-bubbles').classList.add('opacity-0');
+
+            showSkillToast('🗑️', 'ทิ้งแป้งเรียบร้อย!', 'เคลียร์กระทะสะอาดแล้ว เริ่มเทแป้งแผ่นใหม่ได้เลย');
+        }
+
+        // Desktop HTML5 Drag & Drop
+        panPancake.addEventListener('dragstart', (e) => {
+            if (gameState.batterSize <= 0) {
+                e.preventDefault();
+                return;
+            }
+            e.dataTransfer.setData('text/plain', 'pancake');
+            panPancake.classList.add('opacity-60');
+        });
+
+        panPancake.addEventListener('dragend', () => {
+            panPancake.classList.remove('opacity-60');
+            trashBin.classList.remove('scale-110', 'bg-red-300', 'border-red-600');
+        });
+
+        trashBin.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            trashBin.classList.add('scale-110', 'bg-red-300', 'border-red-600');
+        });
+
+        trashBin.addEventListener('dragleave', () => {
+            trashBin.classList.remove('scale-110', 'bg-red-300', 'border-red-600');
+        });
+
+        trashBin.addEventListener('drop', (e) => {
+            e.preventDefault();
+            trashBin.classList.remove('scale-110', 'bg-red-300', 'border-red-600');
+            discardBurntPancake();
+        });
+
+        // Mobile / Touch Drag Support for Pancake -> Trash Bin
+        let isDraggingTouch = false;
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        panPancake.addEventListener('touchstart', (e) => {
+            if (gameState.batterSize <= 0) return;
+            isDraggingTouch = true;
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+            panPancake.style.transition = 'none';
+        }, { passive: true });
+
+        panPancake.addEventListener('touchmove', (e) => {
+            if (!isDraggingTouch) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            const dx = touch.clientX - touchStartX;
+            const dy = touch.clientY - touchStartY;
+            panPancake.style.transform = `translate(${dx}px, ${dy}px)`;
+
+            // Highlight trash bin if hovered
+            const binRect = trashBin.getBoundingClientRect();
+            if (
+                touch.clientX >= binRect.left &&
+                touch.clientX <= binRect.right &&
+                touch.clientY >= binRect.top &&
+                touch.clientY <= binRect.bottom
+            ) {
+                trashBin.classList.add('scale-110', 'bg-red-300', 'border-red-600');
+            } else {
+                trashBin.classList.remove('scale-110', 'bg-red-300', 'border-red-600');
+            }
+        }, { passive: false });
+
+        panPancake.addEventListener('touchend', (e) => {
+            if (!isDraggingTouch) return;
+            isDraggingTouch = false;
+            panPancake.style.transition = 'all 0.2s ease';
+            trashBin.classList.remove('scale-110', 'bg-red-300', 'border-red-600');
+
+            const touch = e.changedTouches[0];
+            const binRect = trashBin.getBoundingClientRect();
+            if (
+                touch.clientX >= binRect.left &&
+                touch.clientX <= binRect.right &&
+                touch.clientY >= binRect.top &&
+                touch.clientY <= binRect.bottom
+            ) {
+                discardBurntPancake();
+            } else {
+                panPancake.style.transform = 'translate(0px, 0px)';
+            }
+        });
+
         function startCooking() {
             gameState.cookLevel = 0;
-            document.getElementById('cook-bubbles').classList.remove('opacity-0');
+            if (gameState.cookSide === 1) {
+                document.getElementById('cook-bubbles').classList.remove('opacity-0');
+                btnPour.setAttribute('disabled', 'true');
+            }
+
+            // Start Smoke Emitter
+            if (gameState.smokeTimer) clearInterval(gameState.smokeTimer);
+            gameState.smokeTimer = setInterval(() => {
+                const isBurnt = gameState.cookLevel >= 78;
+                spawnSmokePuff(isBurnt);
+                if (isBurnt) spawnSmokePuff(true); // Double dark smoke when burning
+            }, 350);
 
             const cookSpeed = 1.2 * gameState.upgrades.stove;
             gameState.cookTimer = setInterval(() => {
@@ -1191,46 +1863,115 @@
                 cookMeter.style.width = `${gameState.cookLevel}%`;
 
                 // Color tint feedback
-                if (gameState.cookLevel < 40) panPancake.style.backgroundColor = '#fef3c7'; // raw
-                else if (gameState.cookLevel < 75) panPancake.style.backgroundColor = '#f59e0b'; // golden
-                else if (gameState.cookLevel < 95) panPancake.style.backgroundColor = '#78350f'; // dark brown
-                else panPancake.style.backgroundColor = '#1f2937'; // burnt
+                if (gameState.cookSide === 1) {
+                    // On side 1, top is still raw batter with golden edge glow
+                    if (gameState.cookLevel < 40) panPancake.style.backgroundColor = '#fef3c7';
+                    else if (gameState.cookLevel < 75) panPancake.style.backgroundColor = '#fde68a';
+                    else if (gameState.cookLevel < 95) panPancake.style.backgroundColor = '#b45309';
+                    else panPancake.style.backgroundColor = '#1f2937';
+                } else {
+                    // On side 2, we see the cooked side 1 facing up while side 2 cooks
+                    if (gameState.cookLevel < 40) panPancake.style.backgroundColor = '#fbbf24';
+                    else if (gameState.cookLevel < 75) panPancake.style.backgroundColor = '#f59e0b';
+                    else if (gameState.cookLevel < 95) panPancake.style.backgroundColor = '#78350f';
+                    else panPancake.style.backgroundColor = '#1f2937';
+                }
 
             }, 100);
         }
 
         btnFlip.addEventListener('click', () => {
-            sound.playFlip();
-            if (gameState.cookTimer) {
-                clearInterval(gameState.cookTimer);
-                gameState.cookTimer = null;
-            }
+            if (gameState.cookSide === 1) {
+                // --- FLIP TO SIDE 2 WITH SPATULA ANIMATION ---
+                sound.playFlip();
+                if (gameState.cookTimer) {
+                    clearInterval(gameState.cookTimer);
+                    gameState.cookTimer = null;
+                }
 
-            // Determine cooked pancake status
-            let quality = 'ทอง';
-            if (gameState.cookLevel < 40) quality = 'ดิบ';
-            else if (gameState.cookLevel > 92) quality = 'ไหม้';
-            else if (gameState.cookLevel > 75) quality = 'เกรียม';
+                gameState.side1CookLevel = gameState.cookLevel;
+                gameState.cookSide = 2;
+                cookSideBadge.innerText = 'ด้านที่ 2 / 2';
+                btnFlip.innerHTML = 'ตักใส่จาน 🍽️';
+                document.getElementById('cook-bubbles').classList.add('opacity-0');
 
-            gameState.cookedPancakes.push({
-                size: gameState.batterSize,
-                quality: quality,
-                color: panPancake.style.backgroundColor
-            });
+                // Trigger Spatula & Pancake Flip Animation
+                spatulaGraphic.classList.remove('hidden');
+                spatulaGraphic.classList.remove('animate-spatula');
+                void spatulaGraphic.offsetWidth; // trigger reflow
+                spatulaGraphic.classList.add('animate-spatula');
 
-            // Reset frying pan for next pancake or move to tab 3
-            gameState.batterSize = 0;
-            gameState.cookLevel = 0;
-            panPancake.style.width = '0px';
-            panPancake.style.height = '0px';
-            cookMeter.style.width = '0%';
-            btnFlip.setAttribute('disabled', 'true');
-            document.getElementById('cook-bubbles').classList.add('opacity-0');
+                panPancake.classList.remove('animate-flip-jump');
+                void panPancake.offsetWidth;
+                panPancake.classList.add('animate-flip-jump');
 
-            if (gameState.cookedPancakes.length >= gameState.order.stack) {
+                // Show cooked color of side 1 facing up immediately upon flip
+                if (gameState.side1CookLevel < 40) panPancake.style.backgroundColor = '#fef3c7';
+                else if (gameState.side1CookLevel < 75) panPancake.style.backgroundColor = '#f59e0b';
+                else if (gameState.side1CookLevel < 95) panPancake.style.backgroundColor = '#78350f';
+                else panPancake.style.backgroundColor = '#1f2937';
+
                 setTimeout(() => {
-                    switchTab(3);
-                }, 400);
+                    spatulaGraphic.classList.add('hidden');
+                }, 650);
+
+                // Resume cooking side 2
+                startCooking();
+
+            } else {
+                // --- SCOOP DONE PANCAKE ONTO PLATE ---
+                sound.playFlip();
+                if (gameState.cookTimer) {
+                    clearInterval(gameState.cookTimer);
+                    gameState.cookTimer = null;
+                }
+                if (gameState.smokeTimer) {
+                    clearInterval(gameState.smokeTimer);
+                    gameState.smokeTimer = null;
+                }
+
+                // Average quality of both sides
+                const avgCook = (gameState.side1CookLevel + gameState.cookLevel) / 2;
+                let quality = 'ทอง';
+                let finalColor = '#f59e0b';
+
+                if (avgCook < 40) {
+                    quality = 'ดิบ';
+                    finalColor = '#fef3c7';
+                } else if (avgCook > 90 || gameState.side1CookLevel > 95 || gameState.cookLevel > 95) {
+                    quality = 'ไหม้';
+                    finalColor = '#1f2937';
+                } else if (avgCook > 75) {
+                    quality = 'เกรียม';
+                    finalColor = '#78350f';
+                }
+
+                gameState.cookedPancakes.push({
+                    size: gameState.batterSize,
+                    quality: quality,
+                    color: finalColor
+                });
+
+                // Reset frying pan for next pancake or move to tab 3
+                gameState.batterSize = 0;
+                gameState.cookLevel = 0;
+                gameState.cookSide = 1;
+                gameState.side1CookLevel = 0;
+                cookSideBadge.innerText = 'ด้านที่ 1 / 2';
+                btnFlip.innerHTML = 'พลิกกลับด้าน 🔄';
+                btnPour.removeAttribute('disabled');
+
+                panPancake.style.width = '0px';
+                panPancake.style.height = '0px';
+                cookMeter.style.width = '0%';
+                btnFlip.setAttribute('disabled', 'true');
+                document.getElementById('cook-bubbles').classList.add('opacity-0');
+
+                if (gameState.cookedPancakes.length >= gameState.order.stack) {
+                    setTimeout(() => {
+                        switchTab(3);
+                    }, 400);
+                }
             }
         });
 
@@ -1306,19 +2047,33 @@
 
                 // Render Top-Down Toppings & Syrup on the top pancake layer
                 if (idx === gameState.cookedPancakes.length - 1) {
-                    // Syrup Overlay Effect
-                    if (gameState.selectedSyrup) {
+                    // Realistic Zig-Zag Syrup Drizzle SVG
+                    if (gameState.selectedSyrup && SYRUPS[gameState.selectedSyrup]) {
+                        const sData = SYRUPS[gameState.selectedSyrup];
                         const syrupOverlay = document.createElement('div');
-                        syrupOverlay.className = 'absolute inset-0 rounded-full opacity-40 pointer-events-none border-4 border-amber-400/60 bg-amber-300/30 blur-[1px]';
+                        syrupOverlay.className = 'absolute inset-0 rounded-full pointer-events-none z-10 overflow-hidden flex items-center justify-center';
+                        syrupOverlay.innerHTML = `
+                            <svg viewBox="0 0 100 100" class="w-[86%] h-[86%] opacity-90 drop-shadow-sm">
+                                <path d="M 18 32 Q 50 18, 82 30 T 20 46 T 80 58 T 22 72 Q 50 82, 76 74" 
+                                      fill="none" stroke="${sData.stroke}" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M 18 32 Q 50 18, 82 30 T 20 46 T 80 58 T 22 72 Q 50 82, 76 74" 
+                                      fill="none" stroke="${sData.highlight}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.65" />
+                            </svg>
+                        `;
                         el.appendChild(syrupOverlay);
                     }
 
-                    // Toppings arrangement (Top-Down view grid)
+                    // Realistic Crafted Toppings arrangement (Top-Down view)
                     if (gameState.selectedToppings.length > 0) {
                         const topBox = document.createElement('div');
-                        topBox.className = 'absolute inset-0 flex flex-wrap justify-center items-center gap-1.5 p-3 z-20 pointer-events-none';
+                        topBox.className = 'absolute inset-0 z-20 pointer-events-none';
                         gameState.selectedToppings.forEach(t => {
-                            topBox.innerHTML += `<span class="text-2xl drop-shadow-md animate-bounce">${TOPPINGS[t].emoji}</span>`;
+                            if (TOPPINGS[t] && TOPPINGS[t].render) {
+                                const layer = document.createElement('div');
+                                layer.className = 'absolute inset-0 transition-all duration-300';
+                                layer.innerHTML = TOPPINGS[t].render();
+                                topBox.appendChild(layer);
+                            }
                         });
                         el.appendChild(topBox);
                     }
@@ -1349,11 +2104,90 @@
                 gameState.selectedSyrup = btn.getAttribute('data-syrup');
                 document.querySelectorAll('.syrup-select-btn').forEach(b => b.classList.remove('bg-amber-200', 'border-amber-500'));
                 btn.classList.add('bg-amber-200', 'border-amber-500');
+                renderFinalPlate();
             });
         });
 
-        // Serve Pancake Button Logic
-        document.getElementById('btn-serve-now').addEventListener('click', () => {
+        document.getElementById('btn-next-station-4').addEventListener('click', () => {
+            sound.playPop();
+            switchTab(5);
+        });
+
+        // --- STATION 5: BUBBLE TEA MACHINE LOGIC ---
+        function checkDrinkReadyToDispense() {
+            if (gameState.hasBoba && gameState.hasIce && gameState.selectedDrink) {
+                document.getElementById('btn-dispense-drink').removeAttribute('disabled');
+            }
+        }
+
+        function resetDrinkStation() {
+            gameState.hasBoba = false;
+            gameState.hasIce = false;
+            gameState.selectedDrink = null;
+            gameState.drinkFill = 0;
+            document.getElementById('cup-boba-pearls').classList.add('hidden');
+            document.getElementById('cup-ice-cubes').classList.add('hidden');
+            document.getElementById('cup-straw').classList.add('hidden');
+            document.getElementById('cup-liquid').style.height = '0%';
+            document.getElementById('drink-stream').classList.add('hidden');
+            document.getElementById('btn-dispense-drink').setAttribute('disabled', 'true');
+            document.querySelectorAll('.drink-select-btn').forEach(b => b.classList.remove('ring-4', 'ring-white'));
+        }
+
+        document.getElementById('btn-add-boba').addEventListener('click', () => {
+            sound.playPop();
+            gameState.hasBoba = true;
+            document.getElementById('cup-boba-pearls').classList.remove('hidden');
+            checkDrinkReadyToDispense();
+        });
+
+        document.getElementById('btn-add-ice').addEventListener('click', () => {
+            sound.playPop();
+            gameState.hasIce = true;
+            document.getElementById('cup-ice-cubes').classList.remove('hidden');
+            checkDrinkReadyToDispense();
+        });
+
+        document.querySelectorAll('.drink-select-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                sound.playClick();
+                gameState.selectedDrink = btn.getAttribute('data-drink');
+                document.querySelectorAll('.drink-select-btn').forEach(b => b.classList.remove('ring-4', 'ring-white'));
+                btn.classList.add('ring-4', 'ring-white');
+
+                const color = DRINKS[gameState.selectedDrink].color;
+                document.getElementById('cup-liquid').style.backgroundColor = color;
+                document.getElementById('drink-stream').style.backgroundColor = color;
+
+                checkDrinkReadyToDispense();
+            });
+        });
+
+        document.getElementById('btn-dispense-drink').addEventListener('click', () => {
+            if (!gameState.hasBoba || !gameState.hasIce || !gameState.selectedDrink) return;
+            sound.playSpread();
+            const stream = document.getElementById('drink-stream');
+            stream.classList.remove('hidden');
+
+            gameState.drinkFill = Math.min(88, gameState.drinkFill + 44);
+            document.getElementById('cup-liquid').style.height = `${gameState.drinkFill}%`;
+
+            if (gameState.drinkFill >= 80) {
+                document.getElementById('cup-straw').classList.remove('hidden');
+            }
+
+            setTimeout(() => {
+                stream.classList.add('hidden');
+            }, 250);
+        });
+
+        document.getElementById('btn-reset-drink').addEventListener('click', () => {
+            sound.playPop();
+            resetDrinkStation();
+        });
+
+        // Shared Serve Evaluation Function
+        function evaluateAndServeOrder() {
             if (gameState.patienceTimer) clearInterval(gameState.patienceTimer);
 
             sound.playCoin();
@@ -1361,9 +2195,16 @@
             // Calculate Order Accuracy & Stars
             let accuracy = 100;
 
-            if (gameState.selectedJam !== gameState.order.jam) accuracy -= 25;
-            if (!gameState.selectedToppings.includes(gameState.order.topping)) accuracy -= 25;
+            if (gameState.selectedJam !== gameState.order.jam) accuracy -= 20;
+            if (!gameState.selectedToppings.includes(gameState.order.topping)) accuracy -= 20;
             if (gameState.selectedSyrup !== gameState.order.syrup) accuracy -= 15;
+
+            // Check Bubble Tea Drink Accuracy ONLY if customer ordered a drink
+            if (gameState.order.drink) {
+                if (!gameState.hasBoba || !gameState.hasIce || gameState.selectedDrink !== gameState.order.drink || gameState.drinkFill < 80) {
+                    accuracy -= 25;
+                }
+            }
 
             // Check Cook quality
             const perfectCookLevel = gameState.skills.perfectCook.level;
@@ -1377,14 +2218,50 @@
             let stars = 1;
             if (accuracy >= 90 && gameState.patience >= 50) stars = 3;
             else if (accuracy >= 60 && gameState.patience >= 30) stars = 2;
+            // Play customer reaction voice based on stars earned & character gender
+            const custPitch = gameState.currentCustomer ? gameState.currentCustomer.pitch : 500;
+            const custGender = gameState.currentCustomer ? gameState.currentCustomer.gender : 'female';
+            if (stars >= 2) {
+                sound.playCustomerVoice('happy', custPitch, custGender);
+            } else {
+                sound.playCustomerVoice('annoyed', custPitch, custGender);
+            }
 
-            // Coins Calculation with Skill & Upgrade Bonuses
-            const tipSkillBonus = gameState.upgrades.tip * 0.5;
-            const moodBonus = (gameState.skills.moodStabilizer.level * 5);
-            const earnedCoins = Math.round((30 * (accuracy / 100) + moodBonus) * (1 + tipSkillBonus));
+            // Calculate Coins Earned
+            const baseReward = 20 + (gameState.order.stack * 10) + (gameState.order.drink ? 10 : 0);
+            const moodBonus = gameState.skills.moodStabilizer.level * 5;
+            const tipMultiplier = gameState.upgrades.tip;
+            const earnedCoins = Math.round((baseReward + moodBonus) * (stars / 3) * tipMultiplier);
 
             gameState.coins += earnedCoins;
+            gameState.servedCount++;
             document.getElementById('coins-display').innerText = gameState.coins;
+
+            // Update Result Modal Title & Emoji
+            const resEmoji = document.getElementById('result-emoji');
+            const resTitle = document.getElementById('result-title');
+            if (stars === 3) {
+                resEmoji.innerText = '🥰';
+                resTitle.innerText = 'อร่อยสุดยอดไปเลย! 3 ดาว!';
+            } else if (stars === 2) {
+                resEmoji.innerText = '😊';
+                resTitle.innerText = 'อร่อยดีนะ! 2 ดาว';
+            } else {
+                resEmoji.innerText = '😅';
+                resTitle.innerText = 'พอทานได้... (1 ดาว)';
+            }
+
+            // Show served pancake & drink on the cafe table in front of customer
+            const tableItems = document.getElementById('table-served-items');
+            const tableDrink = document.getElementById('table-served-drink');
+            if (tableItems) {
+                tableItems.classList.remove('hidden');
+                if (gameState.order.drink) {
+                    tableDrink.classList.remove('hidden');
+                } else {
+                    tableDrink.classList.add('hidden');
+                }
+            }
 
             // Show Result Modal
             document.getElementById('res-accuracy').innerText = `${accuracy}%`;
@@ -1401,7 +2278,11 @@
 
             // Save result for Stage Completion
             advanceCustomerOrder(stars, earnedCoins);
-        });
+        }
+
+        // Serve Buttons (From Station 4 if no drink, or Station 5 with drink)
+        document.getElementById('btn-serve-no-drink').addEventListener('click', evaluateAndServeOrder);
+        document.getElementById('btn-serve-now').addEventListener('click', evaluateAndServeOrder);
 
         function advanceCustomerOrder(stars, earnedCoins) {
             gameState.stageStars += stars;
