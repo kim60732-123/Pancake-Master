@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pancake Master Cafe - ร้านแพนเค้กแสนอร่อย</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Kanit & Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: linear-gradient(135deg, #fff5eb 0%, #ffe4e6 50%, #f0fdf4 100%);
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-6px) rotate(2deg); }
+        }
+
+        @keyframes sizzle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02) rotate(-0.5deg); }
+        }
+
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        .animate-sizzle { animation: sizzle 0.25s ease-in-out infinite; }
+
+        /* Customer Mood Animations */
+        @keyframes shake-angry {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            20% { transform: translateX(-4px) rotate(-4deg); }
+            40% { transform: translateX(4px) rotate(4deg); }
+            60% { transform: translateX(-4px) rotate(-2deg); }
+            80% { transform: translateX(4px) rotate(2deg); }
+        }
+        @keyframes happy-bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-12px) scale(1.08); }
+        }
+
+        .mood-happy { animation: happy-bounce 1.2s ease-in-out infinite; filter: drop-shadow(0 4px 10px rgba(251, 191, 36, 0.5)); }
+        .mood-neutral { animation: float 3s ease-in-out infinite; }
+        .mood-annoyed { animation: float 1.8s ease-in-out infinite; filter: drop-shadow(0 4px 8px rgba(249, 115, 22, 0.4)); }
+        .mood-angry { animation: shake-angry 0.3s ease-in-out infinite; filter: drop-shadow(0 4px 12px rgba(239, 68, 68, 0.7)); }
+
+        /* Floating FX */
+        .floating-heart {
+            position: absolute;
+            pointer-events: none;
+            animation: floatUp 1.2s ease-out forwards;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.6); opacity: 1; }
+            100% { transform: translateY(-60px) scale(1.4); opacity: 0; }
+        }
+
+        .btn-cute {
+            transition: all 0.15s ease;
+            box-shadow: 0 5px 0 rgba(0, 0, 0, 0.1), 0 8px 12px -3px rgba(0, 0, 0, 0.1);
+        }
+        .btn-cute:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 0 rgba(0, 0, 0, 0.1), 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+        }
+        .btn-cute:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .cute-card {
+            background: rgba(255, 255, 255, 0.93);
+            backdrop-filter: blur(12px);
+            border: 4px solid #fff;
+            box-shadow: 0 15px 25px -5px rgba(255, 182, 193, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden text-gray-700">
+
+    <!-- OVERLAY: START GAME SCREEN -->
+    <div id="modal-start-game" class="fixed inset-0 bg-amber-950/70 backdrop-blur-md z-50 flex justify-center items-center p-4">
+        <div class="cute-card rounded-3xl max-w-md w-full p-8 flex flex-col items-center text-center relative animate-float border-4 border-amber-300 shadow-2xl">
+            <div class="w-24 h-24 bg-amber-400 rounded-3xl flex items-center justify-center text-6xl shadow-lg mb-4 transform -rotate-6">
+                🥞
+            </div>
+            <h1 class="text-3xl font-extrabold text-amber-900 mb-2 leading-tight">Pancake Master Cafe</h1>
+            <p class="text-xs text-amber-700 font-semibold mb-6">ยินดีต้อนรับสู่ร้านแพนเค้กสุดน่ารัก! รับออเดอร์ ทอดแป้ง ทาแยม และอัปเกรดสกิลไร้ขีดจำกัด</p>
+            
+            <button id="btn-start-game" class="btn-cute bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-12 py-4 rounded-full text-lg w-full shadow-lg flex items-center justify-center gap-3">
+                <i class="fas fa-play text-xl"></i>
+                <span>เริ่มเล่นเกมเลย!</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Top Header & Dashboard -->
+    <header class="w-full py-3 px-4 md:px-6 bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <!-- Brand -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 md:w-12 md:h-12 bg-amber-400 rounded-2xl flex items-center justify-center text-white text-2xl shadow-md transform -rotate-6 animate-float">
+                    🥞
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-extrabold text-amber-900 leading-tight">Pancake Master Cafe</h1>
+                    <p class="text-[11px] md:text-xs text-amber-600 font-semibold">ร้านแพนเค้กแสนสนุก</p>
+                </div>
+            </div>
+
+            <!-- Stats Dashboard -->
+            <div class="flex items-center gap-3 md:gap-5">
+                <!-- Coins -->
+                <div class="bg-amber-100 border-2 border-amber-300 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-inner">
+                    <span class="text-xl">🪙</span>
+                    <span id="coins-display" class="font-extrabold text-amber-900 text-sm md:text-base">0</span>
+                </div>
+                <!-- Stage Progress -->
+                <div class="bg-indigo-100 border-2 border-indigo-300 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-inner">
+                    <span class="text-xl">📋</span>
+                    <span id="stage-progress-display" class="font-extrabold text-indigo-900 text-sm md:text-base">ออเดอร์: 1/5</span>
+                </div>
+                <!-- Served Customers -->
+                <div class="bg-pink-100 border-2 border-pink-300 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-inner">
+                    <span class="text-xl">⭐</span>
+                    <span id="stars-display" class="font-extrabold text-pink-900 text-sm md:text-base">ดาว: 0/15</span>
+                </div>
+                <!-- Shop & Skill Button -->
+                <button id="btn-open-shop" class="bg-amber-500 hover:bg-amber-600 text-white px-3.5 py-2 rounded-full shadow-md transition flex items-center justify-center gap-2 font-bold text-xs">
+                    <i class="fas fa-graduation-cap text-sm"></i>
+                    <span>ร้านค้า & สกิล</span>
+                </button>
+                <!-- Pause Button -->
+                <button id="btn-pause-game" class="bg-white p-2.5 rounded-full shadow-md text-amber-700 hover:bg-amber-50 transition border border-amber-200">
+                    <i class="fas fa-pause text-lg"></i>
+                </button>
+                <!-- Audio Toggle -->
+                <button id="audio-toggle" class="bg-white p-2.5 rounded-full shadow-md text-amber-700 hover:bg-amber-50 transition border border-amber-200">
+                    <i class="fas fa-volume-up text-lg" id="audio-icon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Game Workspace -->
+    <main class="flex-1 max-w-5xl w-full mx-auto p-3 md:p-6 flex flex-col md:flex-row gap-6 relative items-start">
+
+        <!-- LEFT PANEL: Customer & Active Order Ticket -->
+        <aside class="w-full md:w-80 flex flex-col gap-4">
+            
+            <!-- Customer Avatar Box -->
+            <div id="customer-box" class="cute-card rounded-3xl p-4 flex flex-col items-center relative overflow-hidden transition-colors duration-500">
+                <div class="w-full flex justify-between items-center mb-2">
+                    <span class="text-xs font-bold text-amber-800 bg-amber-100 px-2.5 py-1 rounded-full flex items-center gap-1">
+                        <span id="customer-mood-badge">😊 อารมณ์ดีมาก</span>
+                    </span>
+                    <span id="customer-name" class="text-xs font-bold text-gray-500">น้องหมีน่ารัก</span>
+                </div>
+
+                <!-- Avatar Display -->
+                <div class="relative my-3 flex justify-center items-center w-36 h-36">
+                    <div id="customer-avatar-container" class="relative flex justify-center items-center">
+                        <div id="customer-avatar" class="text-8xl mood-happy transition-transform">🐻</div>
+                        
+                        <!-- Dynamic Mood Overlays / FX -->
+                        <div id="mood-fx-container" class="absolute inset-0 pointer-events-none flex justify-center items-center">
+                            <span id="fx-sweat" class="hidden absolute top-0 right-2 text-2xl">💧</span>
+                            <span id="fx-steam" class="hidden absolute -top-4 text-3xl animate-pulse">💨</span>
+                            <span id="fx-sparkles" class="absolute -top-2 -right-2 text-2xl animate-spin">✨</span>
+                        </div>
+                    </div>
+
+                    <!-- Speech Bubble -->
+                    <div id="customer-bubble" class="absolute -top-3 -right-6 bg-white border-2 border-amber-300 rounded-2xl px-3 py-1 text-xs font-bold shadow-md max-w-[130px] text-center z-10 transition-all">
+                        หิวแล้วน้า! ✨
+                    </div>
+                </div>
+
+                <!-- Customer Patience Bar -->
+                <div class="w-full bg-gray-200 h-3.5 rounded-full overflow-hidden border border-gray-300 mt-1">
+                    <div id="patience-bar" class="bg-emerald-500 h-full w-full transition-all duration-300"></div>
+                </div>
+                <div class="w-full flex justify-between items-center text-[10px] text-gray-500 font-bold mt-1">
+                    <span>ความอดทนลูกค้า</span>
+                    <span id="patience-text">100%</span>
+                </div>
+
+                <!-- Treat Customer Button -->
+                <button id="btn-treat-boba" class="mt-2 w-full bg-pink-100 hover:bg-pink-200 border border-pink-300 text-pink-700 font-bold text-xs py-1.5 px-3 rounded-xl transition flex items-center justify-center gap-1.5 shadow-sm">
+                    <span>🧋</span> เสิร์ฟชาไข่มุกอารมณ์ดี (<span id="boba-power-text">+25%</span>)
+                </button>
+            </div>
+
+            <!-- Order Ticket Box -->
+            <div class="cute-card rounded-3xl p-4 flex flex-col gap-2">
+                <h3 class="text-sm font-extrabold text-amber-900 flex items-center gap-2 border-b border-amber-100 pb-2">
+                    <span>📝</span> ใบสั่งออเดอร์ (Order Ticket)
+                </h3>
+                <div class="space-y-2 text-xs font-semibold">
+                    <div class="flex justify-between border-b border-amber-200/60 pb-1.5">
+                        <span class="text-gray-500">จำนวนชั้น:</span>
+                        <span id="order-stack" class="font-bold text-amber-800">2 ชั้น 🥞</span>
+                    </div>
+                    <div class="flex justify-between border-b border-amber-200/60 pb-1.5">
+                        <span class="text-gray-500">ระดับความสุก:</span>
+                        <span id="order-cook" class="font-bold text-amber-600">สีน้ำตาลทอง 🟡</span>
+                    </div>
+                    <div class="flex justify-between border-b border-amber-200/60 pb-1.5">
+                        <span class="text-gray-500">ซอส / แยม:</span>
+                        <span id="order-jam" class="font-bold text-pink-700">แยมสตรอว์เบอร์รี 🍓</span>
+                    </div>
+                    <div class="flex justify-between border-b border-amber-200/60 pb-1.5">
+                        <span class="text-gray-500">ท็อปปิ้ง:</span>
+                        <span id="order-topping" class="font-bold text-indigo-700">กล้วยหอม 🍌</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">ไซรัป:</span>
+                        <span id="order-syrup" class="font-bold text-amber-900">น้ำผึ้ง 🍯</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- RIGHT PANEL: Cooking Kitchen Steps -->
+        <div class="flex-1 w-full cute-card rounded-3xl p-5 md:p-6 flex flex-col items-center min-h-[480px]">
+            
+            <!-- Navigation Tabs for Cooking Stations -->
+            <div class="w-full flex justify-around border-b-2 border-amber-100 pb-3 mb-4">
+                <button data-tab="1" class="tab-btn font-extrabold text-sm text-amber-500 border-b-4 border-amber-500 pb-1 transition">1. ผสมแป้ง</button>
+                <button data-tab="2" class="tab-btn font-bold text-sm text-gray-400 pb-1 transition">2. ทอดบนเตา</button>
+                <button data-tab="3" class="tab-btn font-bold text-sm text-gray-400 pb-1 transition">3. ทาแยม</button>
+                <button data-tab="4" class="tab-btn font-bold text-sm text-gray-400 pb-1 transition">4. แต่งหน้า & เสิร์ฟ</button>
+            </div>
+
+            <!-- STATION 1: MIXING -->
+            <section id="station-1" class="station-view w-full flex flex-col items-center">
+                <h3 class="text-lg font-bold text-amber-800 mb-1">ผสมส่วนผสมให้เข้ากัน 🥣</h3>
+                <p class="text-xs text-gray-500 mb-4">ใส่แป้ง ไข่ นม น้ำตาล และเนย ลงในชามผสม</p>
+
+                <!-- Bowl Graphic -->
+                <div class="relative w-full max-w-sm h-52 flex justify-center items-end mb-4">
+                    <div id="bowl" class="relative w-56 h-36 bg-gradient-to-b from-sky-200 to-sky-400 rounded-b-full border-4 border-white shadow-xl overflow-hidden flex flex-col justify-end items-center pb-2 cursor-pointer transition-transform active:scale-95">
+                        <div id="bowl-liquid" class="w-full bg-amber-100 rounded-b-full transition-all duration-300 flex items-center justify-center relative" style="height: 0%;">
+                            <div id="mix-bubbles" class="hidden absolute inset-0 flex justify-around items-center opacity-70">
+                                <span class="animate-ping text-xs">🫧</span>
+                                <span class="animate-bounce text-xs">✨</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="whisk" class="hidden absolute top-4 right-1/4 text-5xl transform -rotate-12">🪄</div>
+                </div>
+
+                <!-- Ingredients Grid -->
+                <div class="grid grid-cols-5 gap-2 w-full max-w-md mb-4">
+                    <button data-ing="flour" class="ing-btn flex flex-col items-center bg-white p-2.5 rounded-2xl border-2 border-amber-100 shadow-sm hover:border-amber-400 transition">
+                        <span class="text-2xl">🌾</span>
+                        <span class="text-[10px] font-bold text-gray-700 mt-1">แป้ง</span>
+                    </button>
+                    <button data-ing="egg" class="ing-btn flex flex-col items-center bg-white p-2.5 rounded-2xl border-2 border-amber-100 shadow-sm hover:border-amber-400 transition">
+                        <span class="text-2xl">🥚</span>
+                        <span class="text-[10px] font-bold text-gray-700 mt-1">ไข่ไก่</span>
+                    </button>
+                    <button data-ing="milk" class="ing-btn flex flex-col items-center bg-white p-2.5 rounded-2xl border-2 border-amber-100 shadow-sm hover:border-amber-400 transition">
+                        <span class="text-2xl">🥛</span>
+                        <span class="text-[10px] font-bold text-gray-700 mt-1">นมสด</span>
+                    </button>
+                    <button data-ing="sugar" class="ing-btn flex flex-col items-center bg-white p-2.5 rounded-2xl border-2 border-amber-100 shadow-sm hover:border-amber-400 transition">
+                        <span class="text-2xl">🍬</span>
+                        <span class="text-[10px] font-bold text-gray-700 mt-1">น้ำตาล</span>
+                    </button>
+                    <button data-ing="butter" class="ing-btn flex flex-col items-center bg-white p-2.5 rounded-2xl border-2 border-amber-100 shadow-sm hover:border-amber-400 transition">
+                        <span class="text-2xl">🧈</span>
+                        <span class="text-[10px] font-bold text-gray-700 mt-1">เนย</span>
+                    </button>
+                </div>
+
+                <button id="btn-mix" disabled class="btn-cute bg-amber-400 hover:bg-amber-500 text-amber-950 font-extrabold px-8 py-3 rounded-full text-base disabled:opacity-40">
+                    คนแป้งให้เข้ากัน! 🥣
+                </button>
+            </section>
+
+            <!-- STATION 2: FRYING -->
+            <section id="station-2" class="station-view hidden w-full flex flex-col items-center">
+                <h3 class="text-lg font-bold text-amber-800 mb-1">ทอดแป้งบนกระทะ 🍳</h3>
+                <p class="text-xs text-gray-500 mb-3">กดค้างเพื่อเทแป้ง และพลิกในระดับความสุกที่ออเดอร์ต้องการ</p>
+
+                <div class="relative w-full max-w-sm h-64 flex justify-center items-center my-1">
+                    <div id="pan" class="w-64 h-64 rounded-full bg-gray-800 border-8 border-gray-600 shadow-2xl flex justify-center items-center relative overflow-hidden animate-sizzle">
+                        <div class="w-52 h-52 rounded-full bg-gray-900 border-4 border-gray-700 flex justify-center items-center relative">
+                            <!-- Target size ring -->
+                            <div id="target-zone" class="absolute w-36 h-36 rounded-full border-2 border-dashed border-yellow-400/40 transition-all"></div>
+                            <!-- Pancake Batter/Cake -->
+                            <div id="pan-pancake" class="rounded-full shadow-md transition-colors duration-200 flex items-center justify-center relative bg-amber-100" style="width: 0px; height: 0px;">
+                                <div id="cook-bubbles" class="absolute inset-0 flex flex-wrap justify-around items-center p-4 opacity-0">
+                                    <div class="w-2 h-2 bg-amber-300/80 rounded-full"></div>
+                                    <div class="w-3 h-3 bg-amber-300/80 rounded-full"></div>
+                                    <div class="w-2 h-2 bg-amber-300/80 rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cook Indicator Gauge -->
+                <div class="w-full max-w-xs mb-3">
+                    <div class="flex justify-between text-[10px] font-bold text-gray-500 mb-1">
+                        <span>ดิบ ⚪</span>
+                        <span class="text-amber-600">ทอง 🟡</span>
+                        <span class="text-amber-900">เกรียม 🤎</span>
+                        <span class="text-red-600">ไหม้ 🔴</span>
+                    </div>
+                    <div class="w-full bg-gray-200 h-3 rounded-full overflow-hidden border">
+                        <div id="cook-meter" class="bg-gradient-to-r from-amber-100 via-amber-400 via-amber-700 to-gray-950 h-full w-0 transition-all"></div>
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <button id="btn-pour" class="btn-cute bg-emerald-400 hover:bg-emerald-500 text-emerald-950 font-extrabold px-6 py-2.5 rounded-full text-sm">
+                        กดค้างเทแป้ง 🍯
+                    </button>
+                    <button id="btn-flip" disabled class="btn-cute bg-orange-400 hover:bg-orange-500 text-white font-extrabold px-6 py-2.5 rounded-full text-sm disabled:opacity-40">
+                        พลิกแป้ง / ตักขึ้น 🍳
+                    </button>
+                </div>
+            </section>
+
+            <!-- STATION 3: JAM & SPREAD -->
+            <section id="station-3" class="station-view hidden w-full flex flex-col items-center">
+                <h3 class="text-lg font-bold text-amber-800 mb-1">ทาแยม & สเปรด 🍯</h3>
+                <p class="text-xs text-gray-500 mb-3">เลือกซอสแล้วกดทาบนแพนเค้กให้ทั่ว</p>
+
+                <!-- Stack Plate Preview -->
+                <div class="relative w-full max-w-sm h-56 bg-amber-50/50 rounded-2xl border-2 border-dashed border-amber-200 flex justify-center items-center mb-4">
+                    <div class="w-64 h-14 bg-white border-4 border-gray-200 rounded-full shadow-lg flex justify-center items-center relative">
+                        <div id="jam-pancake-plate" class="absolute bottom-4 flex flex-col-reverse items-center">
+                            <!-- Pancakes inserted here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jam Palette Options -->
+                <div class="grid grid-cols-4 gap-2 w-full max-w-sm mb-4">
+                    <button data-jam="strawberry" class="jam-select-btn flex flex-col items-center bg-white p-2 rounded-2xl border-2 border-pink-200 hover:border-pink-500 transition shadow-sm">
+                        <span class="text-2xl">🍓</span>
+                        <span class="text-[10px] font-bold text-pink-700 mt-1">สตรอว์เบอร์รี</span>
+                    </button>
+                    <button data-jam="blueberry" class="jam-select-btn flex flex-col items-center bg-white p-2 rounded-2xl border-2 border-purple-200 hover:border-purple-500 transition shadow-sm">
+                        <span class="text-2xl">🫐</span>
+                        <span class="text-[10px] font-bold text-purple-700 mt-1">บลูเบอร์รี</span>
+                    </button>
+                    <button data-jam="nutella" class="jam-select-btn flex flex-col items-center bg-white p-2 rounded-2xl border-2 border-amber-300 hover:border-amber-700 transition shadow-sm">
+                        <span class="text-2xl">🍫</span>
+                        <span class="text-[10px] font-bold text-amber-900 mt-1">นูเทลล่า</span>
+                    </button>
+                    <button data-jam="peanut" class="jam-select-btn flex flex-col items-center bg-white p-2 rounded-2xl border-2 border-yellow-300 hover:border-yellow-600 transition shadow-sm">
+                        <span class="text-2xl">🥜</span>
+                        <span class="text-[10px] font-bold text-yellow-800 mt-1">เนยถั่ว</span>
+                    </button>
+                </div>
+
+                <button id="btn-next-station-3" class="btn-cute bg-amber-500 hover:bg-amber-600 text-white font-extrabold px-8 py-2.5 rounded-full text-sm">
+                    ไปยังสถานีแต่งหน้า ➡️
+                </button>
+            </section>
+
+            <!-- STATION 4: TOPPINGS & SERVE -->
+            <section id="station-4" class="station-view hidden w-full flex flex-col items-center">
+                <h3 class="text-lg font-bold text-amber-800 mb-1">แต่งหน้า & ราดไซรัป 🍓✨</h3>
+                <p class="text-xs text-gray-500 mb-3">เลือกท็อปปิ้งและไซรัปให้ตรงกับออเดอร์ของลูกค้า</p>
+
+                <!-- Final Plate Display -->
+                <div class="relative w-full max-w-sm h-48 bg-amber-50/50 rounded-2xl border-2 border-dashed border-amber-200 flex justify-center items-center mb-3">
+                    <div class="w-64 h-14 bg-white border-4 border-gray-200 rounded-full shadow-lg flex justify-center items-center relative">
+                        <div id="final-pancake-plate" class="absolute bottom-4 flex flex-col-reverse items-center">
+                            <!-- Final Stacked Pancakes -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toppings & Syrup Picker -->
+                <div class="w-full max-w-md space-y-2 mb-4">
+                    <div>
+                        <span class="text-xs font-bold text-gray-600 mb-1 block">ท็อปปิ้ง:</span>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button data-topping="banana" class="topping-select-btn bg-white py-1.5 rounded-xl border border-amber-200 text-xs font-bold hover:border-amber-500 transition">🍌 กล้วย</button>
+                            <button data-topping="icecream" class="topping-select-btn bg-white py-1.5 rounded-xl border border-amber-200 text-xs font-bold hover:border-amber-500 transition">🍨 ไอศกรีม</button>
+                            <button data-topping="berry" class="topping-select-btn bg-white py-1.5 rounded-xl border border-amber-200 text-xs font-bold hover:border-amber-500 transition">🍓 เบอร์รี</button>
+                            <button data-topping="chocchip" class="topping-select-btn bg-white py-1.5 rounded-xl border border-amber-200 text-xs font-bold hover:border-amber-500 transition">🍫 ช็อกชิพ</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="text-xs font-bold text-gray-600 mb-1 block">ไซรัป:</span>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button data-syrup="honey" class="syrup-select-btn bg-white py-1.5 rounded-xl border border-amber-200 text-xs font-bold hover:border-amber-500 transition">🍯 น้ำผึ้ง</button>
+                            <button data-syrup="maple" class="syrup-select-btn bg-white py-1.5 rounded-xl border border-amber-200 text-xs font-bold hover:border-amber-500 transition">🍁 เมเปิ้ล</button>
+                            <button data-syrup="choc" class="syrup-select-btn bg-white py-1.5 rounded-xl border border-amber-200 text-xs font-bold hover:border-amber-500 transition">🍫 ช็อกโกแลต</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="btn-serve-now" class="btn-cute bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-10 py-3 rounded-full text-base shadow-lg">
+                    เสิร์ฟลูกค้าทันที! 🍽️✨
+                </button>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- MODAL 1: SHOP & SKILL TREE -->
+    <div id="modal-shop" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex justify-center items-center p-4">
+        <div class="cute-card rounded-3xl max-w-lg w-full p-6 flex flex-col items-center relative max-h-[85vh] overflow-hidden">
+            <button id="btn-close-shop" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-xl font-bold">✕</button>
+            
+            <h2 class="text-2xl font-extrabold text-amber-900 mb-1 flex items-center gap-2">
+                <span>🏪</span> ร้านค้า & สกิลเชฟ
+            </h2>
+            <p class="text-xs text-gray-500 mb-3">ใช้เหรียญทองเพื่ออัปเกรดสกิลและความสามารถของเชฟ!</p>
+
+            <!-- Shop / Skill Tabs -->
+            <div class="flex gap-2 mb-4 bg-amber-100/60 p-1 rounded-full w-full justify-center">
+                <button id="shop-tab-items" class="px-5 py-1.5 rounded-full text-xs font-extrabold bg-white text-amber-900 shadow-sm transition">
+                    🛠️ อุปกรณ์ร้าน
+                </button>
+                <button id="shop-tab-skills" class="px-5 py-1.5 rounded-full text-xs font-extrabold text-gray-500 hover:text-amber-900 transition">
+                    🌟 สกิลผู้เล่น (Skill Tree)
+                </button>
+            </div>
+
+            <!-- Tab Content 1: Items -->
+            <div id="shop-view-items" class="w-full space-y-3 overflow-y-auto pr-1 flex-1">
+                <!-- Upgrade Item 1 -->
+                <div class="bg-white p-3 rounded-2xl border border-amber-200 flex justify-between items-center shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">🔥</span>
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-800">เตาไฟแรงสูง</h4>
+                            <p class="text-[11px] text-gray-500">ทอดแพนเค้กสุกเร็วขึ้น 25%</p>
+                        </div>
+                    </div>
+                    <button data-upgrade="stove" class="btn-buy bg-amber-400 hover:bg-amber-500 text-amber-950 px-3 py-1.5 rounded-full text-xs font-extrabold flex items-center gap-1">
+                        <span>50</span> 🪙
+                    </button>
+                </div>
+
+                <!-- Upgrade Item 2 -->
+                <div class="bg-white p-3 rounded-2xl border border-amber-200 flex justify-between items-center shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">💖</span>
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-800">สเปรย์ความอดทน</h4>
+                            <p class="text-[11px] text-gray-500">ลูกค้าความอดทนลดลงช้าลงเป็นพิเศษ</p>
+                        </div>
+                    </div>
+                    <button data-upgrade="patience" class="btn-buy bg-amber-400 hover:bg-amber-500 text-amber-950 px-3 py-1.5 rounded-full text-xs font-extrabold flex items-center gap-1">
+                        <span>80</span> 🪙
+                    </button>
+                </div>
+
+                <!-- Upgrade Item 3 -->
+                <div class="bg-white p-3 rounded-2xl border border-amber-200 flex justify-between items-center shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">👑</span>
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-800">จานทองคำเชฟ</h4>
+                            <p class="text-[11px] text-gray-500">ได้รับเงินทิปจากลูกค้าเพิ่ม +50%</p>
+                        </div>
+                    </div>
+                    <button data-upgrade="tip" class="btn-buy bg-amber-400 hover:bg-amber-500 text-amber-950 px-3 py-1.5 rounded-full text-xs font-extrabold flex items-center gap-1">
+                        <span>120</span> 🪙
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Content 2: Skill Tree -->
+            <div id="shop-view-skills" class="hidden w-full space-y-3 overflow-y-auto pr-1 flex-1">
+                <!-- Skill 1: Perfect Cook -->
+                <div class="bg-amber-50/60 p-3 rounded-2xl border border-amber-300 flex justify-between items-center shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">🎯</span>
+                        <div>
+                            <h4 class="text-sm font-bold text-amber-900">Perfect Cook (ทอดเป๊ะเวอร์)</h4>
+                            <p class="text-[11px] text-gray-500">ขยายโซนสีทองให้ทอดสุกง่ายขึ้น</p>
+                            <span id="lvl-perfectCook" class="text-[10px] font-bold text-amber-600">Lv. 0</span>
+                        </div>
+                    </div>
+                    <button data-skill="perfectCook" class="btn-skill-buy bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-full text-xs font-extrabold flex items-center gap-1">
+                        <span id="cost-perfectCook">60</span> 🪙
+                    </button>
+                </div>
+
+                <!-- Skill 2: Mood Stabilizer -->
+                <div class="bg-amber-50/60 p-3 rounded-2xl border border-amber-300 flex justify-between items-center shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">😌</span>
+                        <div>
+                            <h4 class="text-sm font-bold text-amber-900">Mood Stabilizer (สเปรย์อารมณ์ดี)</h4>
+                            <p class="text-[11px] text-gray-500">ช่วยให้ลูกค้าอารมณ์ดีนานขึ้น +โบนัสทิป</p>
+                            <span id="lvl-moodStabilizer" class="text-[10px] font-bold text-amber-600">Lv. 0</span>
+                        </div>
+                    </div>
+                    <button data-skill="moodStabilizer" class="btn-skill-buy bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-full text-xs font-extrabold flex items-center gap-1">
+                        <span id="cost-moodStabilizer">85</span> 🪙
+                    </button>
+                </div>
+
+                <!-- Skill 3: Double Batter -->
+                <div class="bg-amber-50/60 p-3 rounded-2xl border border-amber-300 flex justify-between items-center shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">🥣</span>
+                        <div>
+                            <h4 class="text-sm font-bold text-amber-900">Double Batter (ผสมแป้งความเร็วสูง)</h4>
+                            <p class="text-[11px] text-gray-500">เทและผสมแป้งเร็วขึ้นเรื่อยๆ</p>
+                            <span id="lvl-doubleBatter" class="text-[10px] font-bold text-amber-600">Lv. 0</span>
+                        </div>
+                    </div>
+                    <button data-skill="doubleBatter" class="btn-skill-buy bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-full text-xs font-extrabold flex items-center gap-1">
+                        <span id="cost-doubleBatter">75</span> 🪙
+                    </button>
+                </div>
+
+                <!-- Skill 4: Customer Charm -->
+                <div class="bg-pink-50/60 p-3 rounded-2xl border border-pink-300 flex justify-between items-center shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">✨</span>
+                        <div>
+                            <h4 class="text-sm font-bold text-pink-900">Customer Charm (เสน่ห์เชฟมุ้งมิ้ง)</h4>
+                            <p class="text-[11px] text-gray-500">ลดความเร็วหลอดความอดทนลงเรื่อยๆ</p>
+                            <span id="lvl-customerCharm" class="text-[10px] font-bold text-pink-600">Lv. 0</span>
+                        </div>
+                    </div>
+                    <button data-skill="customerCharm" class="btn-skill-buy bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-full text-xs font-extrabold flex items-center gap-1">
+                        <span id="cost-customerCharm">100</span> 🪙
+                    </button>
+                </div>
+
+                <!-- Skill 5: Drink Refine -->
+                <div class="bg-pink-50/60 p-3 rounded-2xl border border-pink-300 flex justify-between items-center shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">🧋</span>
+                        <div>
+                            <h4 class="text-sm font-bold text-pink-900">Drink Refine (ชาไข่มุกสูตรเข้มข้น)</h4>
+                            <p class="text-[11px] text-gray-500">เพิ่มพลังฟื้นฟูชาไข่มุกยิ่งขึ้น</p>
+                            <span id="lvl-drinkRefine" class="text-[10px] font-bold text-pink-600">Lv. 0</span>
+                        </div>
+                    </div>
+                    <button data-skill="drinkRefine" class="btn-skill-buy bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-full text-xs font-extrabold flex items-center gap-1">
+                        <span id="cost-drinkRefine">110</span> 🪙
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: RATING & RESULT -->
+    <div id="modal-result" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex justify-center items-center p-4">
+        <div class="cute-card rounded-3xl max-w-sm w-full p-6 flex flex-col items-center text-center relative">
+            <div id="result-emoji" class="text-6xl mb-2 animate-bounce">🥰</div>
+            <h3 id="result-title" class="text-2xl font-extrabold text-amber-900 mb-1">ลูกค้าประทับใจมาก!</h3>
+            <div id="result-stars" class="flex gap-1 text-3xl text-amber-400 mb-3">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            </div>
+
+            <!-- Score breakdown -->
+            <div class="w-full bg-amber-50 rounded-2xl p-3 border border-amber-200 mb-4 space-y-1.5 text-xs text-gray-600">
+                <div class="flex justify-between">
+                    <span>ความถูกต้องของออเดอร์:</span>
+                    <span id="res-accuracy" class="font-bold text-amber-900">100%</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>ความอดทน / อารมณ์ลูกค้า:</span>
+                    <span id="res-speed" class="font-bold text-amber-900">100%</span>
+                </div>
+                <hr class="border-amber-200">
+                <div class="flex justify-between text-sm font-extrabold text-amber-900">
+                    <span>เงินค่าอาหาร & ทิป:</span>
+                    <span id="res-coins" class="text-emerald-600">+35 🪙</span>
+                </div>
+            </div>
+
+            <button id="btn-close-result" class="btn-cute bg-amber-500 hover:bg-amber-600 text-white font-extrabold px-8 py-3 rounded-full text-base w-full">
+                ทำออเดอร์ถัดไป ➡️
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 3: STAGE CLEAR / VICTORY -->
+    <div id="modal-stage-clear" class="hidden fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex justify-center items-center p-4">
+        <div class="cute-card rounded-3xl max-w-md w-full p-6 flex flex-col items-center text-center relative border-4 border-amber-300">
+            <div class="text-7xl mb-2 animate-bounce">🎉</div>
+            <h2 class="text-3xl font-extrabold text-amber-900 mb-1">ผ่านด่านเรียบร้อยแล้ว!</h2>
+            <p class="text-xs text-amber-700 font-semibold mb-4">คุณเสิร์ฟอาหารครบ 5 ออเดอร์แล้ว!</p>
+
+            <div class="w-full bg-white/80 rounded-2xl p-4 border border-amber-200 mb-5 space-y-3">
+                <div class="flex justify-between items-center border-b border-amber-100 pb-2">
+                    <span class="text-sm font-bold text-gray-600">ดาวรวมที่ทำได้:</span>
+                    <span id="stage-total-stars" class="text-xl font-extrabold text-amber-500 flex items-center gap-1">
+                        15 <i class="fas fa-star text-amber-400"></i>
+                    </span>
+                </div>
+                <div class="flex justify-between items-center border-b border-amber-100 pb-2">
+                    <span class="text-sm font-bold text-gray-600">เหรียญทองรวมสะสม:</span>
+                    <span id="stage-total-coins" class="text-xl font-extrabold text-emerald-600">0 🪙</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-sm font-bold text-gray-600">ระดับฉายาเชฟ:</span>
+                    <span id="stage-rank-title" class="text-xs font-extrabold bg-amber-100 text-amber-900 px-3 py-1 rounded-full">🏆 เชฟแพนเค้กระดับปรมาจารย์</span>
+                </div>
+            </div>
+
+            <button id="btn-restart-stage" class="btn-cute bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-10 py-3.5 rounded-full text-base w-full shadow-lg">
+                เริ่มเล่นด่านถัดไป (รีเซ็ตออเดอร์) 🔄
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 4: PAUSE GAME OVERLAY -->
+    <div id="modal-pause" class="hidden fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex justify-center items-center p-4">
+        <div class="cute-card rounded-3xl max-w-xs w-full p-6 flex flex-col items-center text-center relative border-4 border-amber-300 animate-float">
+            <div class="w-20 h-20 bg-amber-400 rounded-3xl flex items-center justify-center text-5xl shadow-lg mb-3">
+                ⏸️
+            </div>
+            <h2 class="text-2xl font-extrabold text-amber-900 mb-1">พักเกมชั่วคราว</h2>
+            <p class="text-xs text-amber-700 font-semibold mb-6">เวลาในเกมหยุดชั่วคราวแล้วจ้า ☕</p>
+
+            <div class="w-full space-y-3">
+                <button id="btn-resume-game" class="btn-cute bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-6 py-3 rounded-full text-base w-full shadow-md flex items-center justify-center gap-2">
+                    <i class="fas fa-play"></i>
+                    <span>เล่นเกมต่อ</span>
+                </button>
+                <button id="btn-restart-from-pause" class="btn-cute bg-amber-100 hover:bg-amber-200 text-amber-900 font-extrabold px-6 py-2.5 rounded-full text-sm w-full flex items-center justify-center gap-2">
+                    <i class="fas fa-redo"></i>
+                    <span>เริ่มด่านนี้ใหม่</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full py-2.5 text-center text-xs text-amber-800/60 font-medium">
+        Pancake Master Cafe Simulator • สัมผัสประสบการณ์ทำแพนเค้กเสมือนจริง
+    </footer>
+
+    <!-- Game Script Logic -->
+    <script>
+        // --- Web Audio API Synthesizer ---
+        class SoundFX {
+            constructor() {
+                this.ctx = null;
+                this.muted = false;
+            }
+            init() {
+                if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
+            playPop() {
+                if (this.muted) return;
+                this.init();
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(450, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(850, this.ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.08);
+            }
+            playClick() {
+                if (this.muted) return;
+                this.init();
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(600, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(400, this.ctx.currentTime + 0.04);
+                gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.04);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.04);
+            }
+            playSizzle() {
+                if (this.muted) return;
+                this.init();
+                const bufferSize = this.ctx.sampleRate * 0.15;
+                const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+                const noise = this.ctx.createBufferSource();
+                noise.buffer = buffer;
+                const filter = this.ctx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.value = 3000;
+                filter.Q.value = 3;
+
+                const gain = this.ctx.createGain();
+                gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.15);
+
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(this.ctx.destination);
+                noise.start();
+            }
+            playSpread() {
+                if (this.muted) return;
+                this.init();
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(300, this.ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(500, this.ctx.currentTime + 0.12);
+                osc.frequency.linearRampToValueAtTime(250, this.ctx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.2);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.2);
+            }
+            playCoin() {
+                if (this.muted) return;
+                this.init();
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(987.77, this.ctx.currentTime);
+                osc.frequency.setValueAtTime(1318.51, this.ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.25);
+            }
+            playLevelUp() {
+                if (this.muted) return;
+                this.init();
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.06);
+                    gain.gain.setValueAtTime(0.2, this.ctx.currentTime + idx * 0.06);
+                    gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + idx * 0.06 + 0.15);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(this.ctx.currentTime + idx * 0.06);
+                    osc.stop(this.ctx.currentTime + idx * 0.06 + 0.15);
+                });
+            }
+            playFlip() {
+                if (this.muted) return;
+                this.init();
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(650, this.ctx.currentTime + 0.12);
+                gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.12);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.12);
+            }
+        }
+
+        const sound = new SoundFX();
+
+        // Global button click sound handler for all interactive buttons
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('button') || e.target.closest('.btn-cute') || e.target.closest('.ing-btn')) {
+                sound.playClick();
+            }
+        });
+
+        // Mute Toggle
+        document.getElementById('audio-toggle').addEventListener('click', () => {
+            sound.muted = !sound.muted;
+            document.getElementById('audio-icon').className = sound.muted ? 'fas fa-volume-mute text-lg text-gray-400' : 'fas fa-volume-up text-lg text-amber-700';
+        });
+
+        // --- Game Database ---
+        const CUSTOMERS = [
+            { name: 'น้องหมีมุ้งมิ้ง', avatar: '🐻' },
+            { name: 'คุณต่ายสายหวาน', avatar: '🐰' },
+            { name: 'แมวเหมียวจอมกิน', avatar: '🐱' },
+            { name: 'คุณจิ้งจอกนักชิม', avatar: '🦊' },
+            { name: 'คุณแพนด้าอารมณ์ดี', avatar: '🐼' }
+        ];
+
+        const JAMS = {
+            strawberry: { name: 'แยมสตรอว์เบอร์รี 🍓', color: '#ef4444' },
+            blueberry: { name: 'แยมบลูเบอร์รี 🫐', color: '#7c3aed' },
+            nutella: { name: 'นูเทลล่า 🍫', color: '#78350f' },
+            peanut: { name: 'เนยถั่ว 🥜', color: '#d97706' }
+        };
+
+        const TOPPINGS = {
+            banana: { name: 'กล้วยหอม 🍌', emoji: '🍌' },
+            icecream: { name: 'ไอศกรีม 🍨', emoji: '🍨' },
+            berry: { name: 'เบอร์รีสด 🍓', emoji: '🍓' },
+            chocchip: { name: 'ช็อกชิพ 🍫', emoji: '🍫' }
+        };
+
+        const SYRUPS = {
+            honey: { name: 'น้ำผึ้ง 🍯' },
+            maple: { name: 'เมเปิ้ล 🍁' },
+            choc: { name: 'ช็อกโกแลต 🍫' }
+        };
+
+        const EMOTION_STATES = {
+            HAPPY: {
+                badge: '😊 อารมณ์ดีมาก',
+                bubble: ['หิวแล้วน้า! ✨', 'ตื่นเต้นจังเลย! 🎵', 'ขออร่อยๆ นะ! ❤️'],
+                animClass: 'mood-happy',
+                bgColor: 'rgba(254, 243, 199, 0.4)',
+                showSparkles: true, showSweat: false, showSteam: false
+            },
+            NEUTRAL: {
+                badge: '😐 รอคอย...',
+                bubble: ['ใกล้เสร็จหรือยังน้า?', 'รออยู่นะครับ...', 'กลิ่นหอมเริ่มมาแล้ว'],
+                animClass: 'mood-neutral',
+                bgColor: 'rgba(255, 255, 255, 0.93)',
+                showSparkles: false, showSweat: false, showSteam: false
+            },
+            ANNOYED: {
+                badge: 'อารมณ์เสีย 🍊',
+                bubble: ['ช้าจังเลย...', 'รอนานแล้วน้า! 💦', 'หิวจนไส้จะกิ่วแล้ว'],
+                animClass: 'mood-annoyed',
+                bgColor: 'rgba(254, 215, 170, 0.4)',
+                showSparkles: false, showSweat: true, showSteam: false
+            },
+            ANGARY: {
+                badge: '💢 หัวร้อนจัด!',
+                bubble: ['ช้ามากๆ ไม่ไหวแล้ว! 💢', '!#@% ไม่กินแล้วนะ!', 'รีบทำสิเออ!! 💨'],
+                animClass: 'mood-angry',
+                bgColor: 'rgba(254, 202, 202, 0.5)',
+                showSparkles: false, showSweat: false, showSteam: true
+            }
+        };
+
+        const gameState = {
+            coins: 0,
+            servedCount: 0,
+            stageCustomerIndex: 1, // Track 1 to 5
+            maxStageCustomers: 5,
+            stageStars: 0,
+            activeTab: 1,
+            isPaused: false,
+            upgrades: { stove: 1, patience: 1, tip: 1 },
+            skills: {
+                perfectCook: { level: 0, baseCost: 60, costMultiplier: 1.4 },
+                moodStabilizer: { level: 0, baseCost: 85, costMultiplier: 1.45 },
+                doubleBatter: { level: 0, baseCost: 75, costMultiplier: 1.4 },
+                customerCharm: { level: 0, baseCost: 100, costMultiplier: 1.5 },
+                drinkRefine: { level: 0, baseCost: 110, costMultiplier: 1.5 }
+            },
+            currentEmotionState: 'HAPPY',
+            currentCustomer: null,
+            order: null,
+            patience: 100,
+            patienceTimer: null,
+            mixIngredients: new Set(),
+            mixProgress: 0,
+            batterSize: 0,
+            cookLevel: 0,
+            cookTimer: null,
+            cookedPancakes: [],
+            selectedJam: null,
+            selectedToppings: [],
+            selectedSyrup: null
+        };
+
+        // Pause Game Logic
+        document.getElementById('btn-pause-game').addEventListener('click', () => {
+            sound.playPop();
+            gameState.isPaused = true;
+            document.getElementById('modal-pause').classList.remove('hidden');
+        });
+
+        document.getElementById('btn-resume-game').addEventListener('click', () => {
+            sound.playPop();
+            gameState.isPaused = false;
+            document.getElementById('modal-pause').classList.add('hidden');
+        });
+
+        document.getElementById('btn-restart-from-pause').addEventListener('click', () => {
+            sound.playPop();
+            gameState.isPaused = false;
+            document.getElementById('modal-pause').classList.add('hidden');
+            gameState.stageCustomerIndex = 1;
+            gameState.stageStars = 0;
+            document.getElementById('stage-progress-display').innerText = `ออเดอร์: 1/5`;
+            document.getElementById('stars-display').innerText = `ดาว: 0/15`;
+            generateCustomerOrder();
+            switchTab(1);
+        });
+
+        // Helper to calculate skill cost dynamically
+        function getSkillCost(skKey) {
+            const sk = gameState.skills[skKey];
+            return Math.round(sk.baseCost * Math.pow(sk.costMultiplier, sk.level));
+        }
+
+        // Start Game Button Logic
+        document.getElementById('btn-start-game').addEventListener('click', () => {
+            sound.init();
+            sound.playPop();
+            document.getElementById('modal-start-game').classList.add('hidden');
+            generateCustomerOrder();
+            switchTab(1);
+        });
+
+        // Tab Switching Mechanism
+        function switchTab(tabNum) {
+            sound.playClick();
+            gameState.activeTab = tabNum;
+            document.querySelectorAll('.station-view').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`station-${tabNum}`).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                const t = parseInt(btn.getAttribute('data-tab'));
+                if (t === tabNum) {
+                    btn.className = 'tab-btn font-extrabold text-sm text-amber-500 border-b-4 border-amber-500 pb-1 transition';
+                } else {
+                    btn.className = 'tab-btn font-bold text-sm text-gray-400 pb-1 transition';
+                }
+            });
+
+            if (tabNum === 3) renderJamPlate();
+            if (tabNum === 4) renderFinalPlate();
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = parseInt(btn.getAttribute('data-tab'));
+                switchTab(tab);
+            });
+        });
+
+        // Customer Mood & Patience System
+        function updateCustomerMoodVisuals() {
+            const container = document.getElementById('customer-box');
+            const avatar = document.getElementById('customer-avatar');
+            const badge = document.getElementById('customer-mood-badge');
+            const bubble = document.getElementById('customer-bubble');
+            const sweat = document.getElementById('fx-sweat');
+            const steam = document.getElementById('fx-steam');
+            const sparkles = document.getElementById('fx-sparkles');
+
+            let moodKey = 'HAPPY';
+            if (gameState.patience <= 25) moodKey = 'ANGARY';
+            else if (gameState.patience <= 55) moodKey = 'ANNOYED';
+            else if (gameState.patience <= 80) moodKey = 'NEUTRAL';
+
+            gameState.currentEmotionState = moodKey;
+            const mood = EMOTION_STATES[moodKey];
+
+            avatar.className = `text-8xl transition-transform ${mood.animClass}`;
+            container.style.backgroundColor = mood.bgColor;
+            badge.innerText = mood.badge;
+
+            // FX Visibility
+            sweat.classList.toggle('hidden', !mood.showSweat);
+            steam.classList.toggle('hidden', !mood.showSteam);
+            sparkles.classList.toggle('hidden', !mood.showSparkles);
+
+            // Random Speech Bubble text if not updated recently
+            if (Math.random() < 0.15) {
+                const textList = mood.bubble;
+                bubble.innerText = textList[Math.floor(Math.random() * textList.length)];
+            }
+        }
+
+        function generateCustomerOrder() {
+            const randomCust = CUSTOMERS[Math.floor(Math.random() * CUSTOMERS.length)];
+            gameState.currentCustomer = randomCust;
+            
+            // Random Order Specs
+            const jamKeys = Object.keys(JAMS);
+            const topKeys = Object.keys(TOPPINGS);
+            const syrupKeys = Object.keys(SYRUPS);
+
+            const stack = Math.floor(Math.random() * 2) + 1; // 1 or 2 layers
+            const jam = jamKeys[Math.floor(Math.random() * jamKeys.length)];
+            const topping = topKeys[Math.floor(Math.random() * topKeys.length)];
+            const syrup = syrupKeys[Math.floor(Math.random() * syrupKeys.length)];
+
+            gameState.order = {
+                stack: stack,
+                cookTarget: 'ทอง 🟡',
+                jam: jam,
+                topping: topping,
+                syrup: syrup
+            };
+
+            // UI Render Ticket & Customer
+            document.getElementById('customer-name').innerText = randomCust.name;
+            document.getElementById('customer-avatar').innerText = randomCust.avatar;
+            document.getElementById('order-stack').innerText = `${stack} ชั้น 🥞`;
+            document.getElementById('order-jam').innerText = JAMS[jam].name;
+            document.getElementById('order-topping').innerText = TOPPINGS[topping].name;
+            document.getElementById('order-syrup').innerText = SYRUPS[syrup].name;
+
+            // Reset Kitchen State
+            gameState.cookedPancakes = [];
+            gameState.mixIngredients.clear();
+            gameState.mixProgress = 0;
+            gameState.selectedJam = null;
+            gameState.selectedToppings = [];
+            gameState.selectedSyrup = null;
+            resetMixingUI();
+
+            // Reset Patience & Timer (Reduced Decay Rate for slow timer)
+            gameState.patience = 100;
+            updatePatienceUI();
+
+            if (gameState.patienceTimer) clearInterval(gameState.patienceTimer);
+            
+            // Base decay speed - charm skill reduces decay speed further
+            const charmBonus = gameState.skills.customerCharm.level * 0.08;
+            const patienceDecay = Math.max(0.12, 0.35 - charmBonus); 
+
+            gameState.patienceTimer = setInterval(() => {
+                if (gameState.isPaused) return; // Freeze patience timer when paused
+
+                gameState.patience = Math.max(0, gameState.patience - patienceDecay);
+                updatePatienceUI();
+                updateCustomerMoodVisuals();
+
+                if (gameState.patience <= 0) {
+                    clearInterval(gameState.patienceTimer);
+                    handleRageQuit();
+                }
+            }, 500);
+        }
+
+        function updatePatienceUI() {
+            const bar = document.getElementById('patience-bar');
+            const txt = document.getElementById('patience-text');
+            bar.style.width = `${gameState.patience}%`;
+            txt.innerText = `${Math.round(gameState.patience)}%`;
+
+            if (gameState.patience > 60) bar.className = 'bg-emerald-500 h-full transition-all duration-300';
+            else if (gameState.patience > 30) bar.className = 'bg-amber-500 h-full transition-all duration-300';
+            else bar.className = 'bg-red-500 h-full transition-all duration-300';
+        }
+
+        // Treat Boba Button
+        document.getElementById('btn-treat-boba').addEventListener('click', () => {
+            sound.playPop();
+            const bobaPower = 25 + (gameState.skills.drinkRefine.level * 5);
+            gameState.patience = Math.min(100, gameState.patience + bobaPower);
+            updatePatienceUI();
+            updateCustomerMoodVisuals();
+
+            // Floating FX
+            const container = document.getElementById('customer-box');
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart text-2xl z-20';
+            heart.innerText = '🧋✨';
+            heart.style.left = `${Math.random() * 60 + 20}%`;
+            heart.style.top = '40%';
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), 1200);
+        });
+
+        function handleRageQuit() {
+            sound.playPop();
+            const bubble = document.getElementById('customer-bubble');
+            bubble.innerText = 'โมโหแล้ว! ไม่กินแล้ว!! 🤬';
+
+            setTimeout(() => {
+                alert('😭 ลูกค้าหมดความอดทนและเดินออกจากร้านไป! (ได้ 0 ดาว)');
+                advanceCustomerOrder(0, 0);
+            }, 600);
+        }
+
+        // --- STATION 1: MIXING LOGIC ---
+        document.querySelectorAll('.ing-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                sound.playPop();
+                const ing = btn.getAttribute('data-ing');
+                gameState.mixIngredients.add(ing);
+                btn.classList.add('bg-emerald-100', 'border-emerald-400');
+
+                if (gameState.mixIngredients.size >= 5) {
+                    document.getElementById('btn-mix').removeAttribute('disabled');
+                }
+            });
+        });
+
+        function resetMixingUI() {
+            document.querySelectorAll('.ing-btn').forEach(b => {
+                b.className = 'ing-btn flex flex-col items-center bg-white p-2.5 rounded-2xl border-2 border-amber-100 shadow-sm hover:border-amber-400 transition';
+            });
+            document.getElementById('btn-mix').setAttribute('disabled', 'true');
+            document.getElementById('bowl-liquid').style.height = '0%';
+        }
+
+        document.getElementById('btn-mix').addEventListener('click', () => {
+            sound.playPop();
+            const speed = 25 + (gameState.skills.doubleBatter.level * 10);
+            gameState.mixProgress = Math.min(100, gameState.mixProgress + speed);
+            document.getElementById('bowl-liquid').style.height = `${gameState.mixProgress}%`;
+
+            if (gameState.mixProgress >= 100) {
+                setTimeout(() => {
+                    switchTab(2);
+                }, 300);
+            }
+        });
+
+        // --- STATION 2: FRYING LOGIC ---
+        let pourInterval = null;
+
+        const btnPour = document.getElementById('btn-pour');
+        const btnFlip = document.getElementById('btn-flip');
+        const panPancake = document.getElementById('pan-pancake');
+        const cookMeter = document.getElementById('cook-meter');
+
+        function startPouring() {
+            if (gameState.cookTimer) return;
+            sound.playSizzle();
+            pourInterval = setInterval(() => {
+                const pourSpeed = 3 + (gameState.skills.doubleBatter.level * 1.5);
+                gameState.batterSize = Math.min(140, gameState.batterSize + pourSpeed);
+                panPancake.style.width = `${gameState.batterSize}px`;
+                panPancake.style.height = `${gameState.batterSize}px`;
+
+                if (gameState.batterSize >= 90) {
+                    btnFlip.removeAttribute('disabled');
+                }
+            }, 50);
+        }
+
+        function stopPouring() {
+            if (pourInterval) {
+                clearInterval(pourInterval);
+                pourInterval = null;
+                if (gameState.batterSize > 20 && !gameState.cookTimer) {
+                    startCooking();
+                }
+            }
+        }
+
+        btnPour.addEventListener('mousedown', startPouring);
+        btnPour.addEventListener('mouseup', stopPouring);
+        btnPour.addEventListener('touchstart', (e) => { e.preventDefault(); startPouring(); });
+        btnPour.addEventListener('touchend', stopPouring);
+
+        function startCooking() {
+            gameState.cookLevel = 0;
+            document.getElementById('cook-bubbles').classList.remove('opacity-0');
+
+            const cookSpeed = 1.2 * gameState.upgrades.stove;
+            gameState.cookTimer = setInterval(() => {
+                if (gameState.isPaused) return; // Freeze cook meter timer when paused
+
+                gameState.cookLevel = Math.min(100, gameState.cookLevel + cookSpeed);
+                cookMeter.style.width = `${gameState.cookLevel}%`;
+
+                // Color tint feedback
+                if (gameState.cookLevel < 40) panPancake.style.backgroundColor = '#fef3c7'; // raw
+                else if (gameState.cookLevel < 75) panPancake.style.backgroundColor = '#f59e0b'; // golden
+                else if (gameState.cookLevel < 95) panPancake.style.backgroundColor = '#78350f'; // dark brown
+                else panPancake.style.backgroundColor = '#1f2937'; // burnt
+
+            }, 100);
+        }
+
+        btnFlip.addEventListener('click', () => {
+            sound.playFlip();
+            if (gameState.cookTimer) {
+                clearInterval(gameState.cookTimer);
+                gameState.cookTimer = null;
+            }
+
+            // Determine cooked pancake status
+            let quality = 'ทอง';
+            if (gameState.cookLevel < 40) quality = 'ดิบ';
+            else if (gameState.cookLevel > 92) quality = 'ไหม้';
+            else if (gameState.cookLevel > 75) quality = 'เกรียม';
+
+            gameState.cookedPancakes.push({
+                size: gameState.batterSize,
+                quality: quality,
+                color: panPancake.style.backgroundColor
+            });
+
+            // Reset frying pan for next pancake or move to tab 3
+            gameState.batterSize = 0;
+            gameState.cookLevel = 0;
+            panPancake.style.width = '0px';
+            panPancake.style.height = '0px';
+            cookMeter.style.width = '0%';
+            btnFlip.setAttribute('disabled', 'true');
+            document.getElementById('cook-bubbles').classList.add('opacity-0');
+
+            if (gameState.cookedPancakes.length >= gameState.order.stack) {
+                setTimeout(() => {
+                    switchTab(3);
+                }, 400);
+            }
+        });
+
+        // --- STATION 3: JAM & SPREAD LOGIC ---
+        function renderJamPlate() {
+            const container = document.getElementById('jam-pancake-plate');
+            container.innerHTML = '';
+
+            gameState.cookedPancakes.forEach((pc, idx) => {
+                const el = document.createElement('div');
+                el.className = 'w-44 h-8 rounded-full border-2 border-amber-900/20 shadow-md relative -mb-3 flex items-center justify-center transition-all';
+                el.style.backgroundColor = pc.color || '#f59e0b';
+
+                // Jam Overlay Layer
+                if (gameState.selectedJam) {
+                    const jamLayer = document.createElement('div');
+                    jamLayer.className = 'w-36 h-4 rounded-full opacity-90 transition-all';
+                    jamLayer.style.backgroundColor = JAMS[gameState.selectedJam].color;
+                    el.appendChild(jamLayer);
+                }
+
+                container.appendChild(el);
+            });
+        }
+
+        document.querySelectorAll('.jam-select-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                sound.playSpread();
+                gameState.selectedJam = btn.getAttribute('data-jam');
+                document.querySelectorAll('.jam-select-btn').forEach(b => b.classList.remove('border-amber-500', 'ring-2', 'ring-amber-400'));
+                btn.classList.add('border-amber-500', 'ring-2', 'ring-amber-400');
+                renderJamPlate();
+            });
+        });
+
+        document.getElementById('btn-next-station-3').addEventListener('click', () => {
+            sound.playPop();
+            switchTab(4);
+        });
+
+        // --- STATION 4: TOPPINGS & SERVE LOGIC ---
+        function renderFinalPlate() {
+            const container = document.getElementById('final-pancake-plate');
+            container.innerHTML = '';
+
+            gameState.cookedPancakes.forEach((pc, idx) => {
+                const el = document.createElement('div');
+                el.className = 'w-44 h-8 rounded-full border-2 border-amber-900/20 shadow-md relative -mb-3 flex items-center justify-center';
+                el.style.backgroundColor = pc.color || '#f59e0b';
+
+                if (gameState.selectedJam) {
+                    const jamLayer = document.createElement('div');
+                    jamLayer.className = 'w-36 h-4 rounded-full opacity-90';
+                    jamLayer.style.backgroundColor = JAMS[gameState.selectedJam].color;
+                    el.appendChild(jamLayer);
+                }
+
+                // Render Toppings & Syrup on top pancake layer
+                if (idx === gameState.cookedPancakes.length - 1) {
+                    if (gameState.selectedToppings.length > 0) {
+                        const topBox = document.createElement('div');
+                        topBox.className = 'absolute -top-5 flex gap-1 text-xl z-20';
+                        gameState.selectedToppings.forEach(t => {
+                            topBox.innerHTML += `<span>${TOPPINGS[t].emoji}</span>`;
+                        });
+                        el.appendChild(topBox);
+                    }
+                }
+
+                container.appendChild(el);
+            });
+        }
+
+        document.querySelectorAll('.topping-select-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                sound.playPop();
+                const top = btn.getAttribute('data-topping');
+                if (gameState.selectedToppings.includes(top)) {
+                    gameState.selectedToppings = gameState.selectedToppings.filter(t => t !== top);
+                    btn.classList.remove('bg-amber-200', 'border-amber-500');
+                } else {
+                    gameState.selectedToppings.push(top);
+                    btn.classList.add('bg-amber-200', 'border-amber-500');
+                }
+                renderFinalPlate();
+            });
+        });
+
+        document.querySelectorAll('.syrup-select-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                sound.playSpread();
+                gameState.selectedSyrup = btn.getAttribute('data-syrup');
+                document.querySelectorAll('.syrup-select-btn').forEach(b => b.classList.remove('bg-amber-200', 'border-amber-500'));
+                btn.classList.add('bg-amber-200', 'border-amber-500');
+            });
+        });
+
+        // Serve Pancake Button Logic
+        document.getElementById('btn-serve-now').addEventListener('click', () => {
+            if (gameState.patienceTimer) clearInterval(gameState.patienceTimer);
+
+            sound.playCoin();
+
+            // Calculate Order Accuracy & Stars
+            let accuracy = 100;
+
+            if (gameState.selectedJam !== gameState.order.jam) accuracy -= 25;
+            if (!gameState.selectedToppings.includes(gameState.order.topping)) accuracy -= 25;
+            if (gameState.selectedSyrup !== gameState.order.syrup) accuracy -= 15;
+
+            // Check Cook quality
+            const perfectCookLevel = gameState.skills.perfectCook.level;
+            gameState.cookedPancakes.forEach(pc => {
+                if (pc.quality !== 'ทอง' && perfectCookLevel === 0) accuracy -= 15;
+            });
+
+            accuracy = Math.max(0, accuracy);
+
+            // Determine Stars
+            let stars = 1;
+            if (accuracy >= 90 && gameState.patience >= 50) stars = 3;
+            else if (accuracy >= 60 && gameState.patience >= 30) stars = 2;
+
+            // Coins Calculation with Skill & Upgrade Bonuses
+            const tipSkillBonus = gameState.upgrades.tip * 0.5;
+            const moodBonus = (gameState.skills.moodStabilizer.level * 5);
+            const earnedCoins = Math.round((30 * (accuracy / 100) + moodBonus) * (1 + tipSkillBonus));
+
+            gameState.coins += earnedCoins;
+            document.getElementById('coins-display').innerText = gameState.coins;
+
+            // Show Result Modal
+            document.getElementById('res-accuracy').innerText = `${accuracy}%`;
+            document.getElementById('res-speed').innerText = `${Math.round(gameState.patience)}%`;
+            document.getElementById('res-coins').innerText = `+${earnedCoins} 🪙`;
+
+            const starContainer = document.getElementById('result-stars');
+            starContainer.innerHTML = '';
+            for (let i = 0; i < 3; i++) {
+                starContainer.innerHTML += `<i class="fas fa-star ${i < stars ? 'text-amber-400' : 'text-gray-300'}"></i>`;
+            }
+
+            document.getElementById('modal-result').classList.remove('hidden');
+
+            // Save result for Stage Completion
+            advanceCustomerOrder(stars, earnedCoins);
+        });
+
+        function advanceCustomerOrder(stars, earnedCoins) {
+            gameState.stageStars += stars;
+            document.getElementById('stars-display').innerText = `ดาว: ${gameState.stageStars}/15`;
+
+            document.getElementById('btn-close-result').onclick = () => {
+                document.getElementById('modal-result').classList.add('hidden');
+
+                if (gameState.stageCustomerIndex >= gameState.maxStageCustomers) {
+                    // Trigger Stage Clear Victory Modal
+                    showStageClearModal();
+                } else {
+                    gameState.stageCustomerIndex++;
+                    document.getElementById('stage-progress-display').innerText = `ออเดอร์: ${gameState.stageCustomerIndex}/5`;
+                    generateCustomerOrder();
+                    switchTab(1);
+                }
+            };
+        }
+
+        function showStageClearModal() {
+            sound.playLevelUp();
+            document.getElementById('stage-total-stars').innerHTML = `${gameState.stageStars} / 15 <i class="fas fa-star text-amber-400"></i>`;
+            document.getElementById('stage-total-coins').innerText = `${gameState.coins} 🪙`;
+            document.getElementById('modal-stage-clear').classList.remove('hidden');
+        }
+
+        document.getElementById('btn-restart-stage').addEventListener('click', () => {
+            sound.playPop();
+            document.getElementById('modal-stage-clear').classList.add('hidden');
+            gameState.stageCustomerIndex = 1;
+            gameState.stageStars = 0;
+            document.getElementById('stage-progress-display').innerText = `ออเดอร์: 1/5`;
+            document.getElementById('stars-display').innerText = `ดาว: 0/15`;
+            generateCustomerOrder();
+            switchTab(1);
+        });
+
+        // --- SHOP & SKILL SYSTEM LOGIC ---
+        document.getElementById('btn-open-shop').addEventListener('click', () => {
+            sound.playPop();
+            updateShopUI();
+            document.getElementById('modal-shop').classList.remove('hidden');
+        });
+
+        document.getElementById('btn-close-shop').addEventListener('click', () => {
+            sound.playPop();
+            document.getElementById('modal-shop').classList.add('hidden');
+        });
+
+        // Shop Sub-Tabs
+        document.getElementById('shop-tab-items').addEventListener('click', () => {
+            sound.playPop();
+            document.getElementById('shop-view-items').classList.remove('hidden');
+            document.getElementById('shop-view-skills').classList.add('hidden');
+            document.getElementById('shop-tab-items').className = 'px-5 py-1.5 rounded-full text-xs font-extrabold bg-white text-amber-900 shadow-sm transition';
+            document.getElementById('shop-tab-skills').className = 'px-5 py-1.5 rounded-full text-xs font-extrabold text-gray-500 hover:text-amber-900 transition';
+        });
+
+        document.getElementById('shop-tab-skills').addEventListener('click', () => {
+            sound.playPop();
+            document.getElementById('shop-view-skills').classList.remove('hidden');
+            document.getElementById('shop-view-items').classList.add('hidden');
+            document.getElementById('shop-tab-skills').className = 'px-5 py-1.5 rounded-full text-xs font-extrabold bg-white text-amber-900 shadow-sm transition';
+            document.getElementById('shop-tab-items').className = 'px-5 py-1.5 rounded-full text-xs font-extrabold text-gray-500 hover:text-amber-900 transition';
+        });
+
+        function updateShopUI() {
+            // Update Skill Levels & Costs text
+            Object.keys(gameState.skills).forEach(skKey => {
+                const sk = gameState.skills[skKey];
+                const cost = getSkillCost(skKey);
+                const lvlEl = document.getElementById(`lvl-${skKey}`);
+                const costEl = document.getElementById(`cost-${skKey}`);
+                if (lvlEl) lvlEl.innerText = `Lv. ${sk.level}`;
+                if (costEl) costEl.innerText = cost;
+            });
+        }
+
+        // Skill Buy Event Listener (Infinite Scaling)
+        document.querySelectorAll('.btn-skill-buy').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const skKey = btn.getAttribute('data-skill');
+                const cost = getSkillCost(skKey);
+
+                if (gameState.coins >= cost) {
+                    sound.playLevelUp();
+                    gameState.coins -= cost;
+                    gameState.skills[skKey].level++;
+                    document.getElementById('coins-display').innerText = gameState.coins;
+                    updateShopUI();
+                } else {
+                    alert('🪙 เหรียญทองไม่เพียงพอสำหรับการอัปเกรด!');
+                }
+            });
+        });
+
+        // Item Buy Event Listener
+        document.querySelectorAll('.btn-buy').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const upKey = btn.getAttribute('data-upgrade');
+                const cost = parseInt(btn.querySelector('span').innerText);
+
+                if (gameState.coins >= cost) {
+                    sound.playLevelUp();
+                    gameState.coins -= cost;
+                    gameState.upgrades[upKey] += 0.5;
+                    document.getElementById('coins-display').innerText = gameState.coins;
+                    btn.setAttribute('disabled', 'true');
+                    btn.innerHTML = '✔ สำเร็จ';
+                    btn.className = 'bg-gray-300 text-gray-600 px-3 py-1.5 rounded-full text-xs font-bold';
+                } else {
+                    alert('🪙 เหรียญทองไม่เพียงพอ!');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
